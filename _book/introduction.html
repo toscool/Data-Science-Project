@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Project Group 9 : The influence of market value in football</title>
+  <meta name="description" content="Project Group 9 : The influence of market value in football" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Project Group 9 : The influence of market value in football" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Project Group 9 : The influence of market value in football" />
+  
+  
+  
+
+<meta name="author" content="BAEUMLIN Thomas, RENGER Hadrien" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="exploratory-data-analysis.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#why-this-subject"><i class="fa fa-check"></i><b>1.1</b> Why this subject ?</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#description-of-the-data"><i class="fa fa-check"></i><b>1.2</b> Description of the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#a-high-evolution-in-term-of-player-market-value"><i class="fa fa-check"></i><b>2.1</b> A high evolution in term of player market value</a></li>
+<li class="chapter" data-level="2.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-power-of-money"><i class="fa fa-check"></i><b>2.2</b> The power of money</a></li>
+<li class="chapter" data-level="2.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#disparities-in-football"><i class="fa fa-check"></i><b>2.3</b> Disparities in Football</a></li>
+<li class="chapter" data-level="2.4" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-champions-league"><i class="fa fa-check"></i><b>2.4</b> The Champions League</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>3</b> Modeling</a><ul>
+<li class="chapter" data-level="3.1" data-path="modeling.html"><a href="modeling.html#model"><i class="fa fa-check"></i><b>3.1</b> Model</a></li>
+<li class="chapter" data-level="3.2" data-path="modeling.html"><a href="modeling.html#goodness-of-fit"><i class="fa fa-check"></i><b>3.2</b> Goodness of fit</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Project Group 9 : The influence of market value in football</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Project Group 9 : The influence of market value in football</h1>
+<p class="author"><em>BAEUMLIN Thomas, RENGER Hadrien</em></p>
+<p class="date"><em>24 mai, 2020</em></p>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Since the 2000s, a lot of football specialists or just football lovers are disappointed about football.
+Indeed, money tend to parasite football and to have more and more influence in the football world.
+A lot of teams have been purchased by billionaires who come often from foreigners’ countries like Qatar, United Arab Emirates, Russia or the USA. They want results immediately and they are not afraid to spend a lot of money. Other teams are aware of that and ask for more money to sell their players. Indeed, the price of player-transfers are rising inexorably, as the player salaries.<br />
+This is not the only explication, the increase in the amount of television rights is another variable. The boom in these rights, advertising revenues, merchandising are indicative of the globalization of the football economy and its constant expansion.
+Football is not just a sport anymore but a real business where a lot of money is put at stake.</p>
+<p><span class="citation">(For more details William <a href="#ref-arti1">2017</a>)</span>.</p>
+<p>There is no more secret to be successful, you need money to be able to build a competitive team or just to keep your best players.</p>
+<p>But what is the real influence of money in the 5 mains football leagues? Do you really need to have the more expensive team to be champion of the league? And conversely it is always the poorest who descend in second league? How evolved the disparities across time?</p>
+<p>This is as much as questions we are going to try to answer.</p>
+<p><img src="image/league.jpeg" width="70%" style="display: block; margin: auto;" /></p>
+<div id="why-this-subject" class="section level2">
+<h2><span class="header-section-number">1.1</span> Why this subject ?</h2>
+<p>Passionates about football since 2006 and the dramatic World Cup final lost by the french against the italians, we wanted to combine utility and pleasure. We wanted to find a subject related to Football but this was not an easy task. After some days of reflection, we have found our subject: the influence of money in football.</p>
+<p>A topic of conversation that every person who are passionate about football have already had. Everybody agreed to say that money has an impact, but some people say that it is a limited one, indeed a good game strategy could be sufficient to compensate an inferior amount of money to win against the richest team. We wanted to close the debate with some real statistics and not with a lot of “bla-bla” which come from nowhere.</p>
+<p><img src="image/zizou.jpg" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="description-of-the-data" class="section level2">
+<h2><span class="header-section-number">1.2</span> Description of the data</h2>
+<p>In order to be able to analyse the impact of money in football, we needed on one hand to find data representing sports results and on the other hand looking for financial data for each teams.</p>
+<p>For the financial part we have had to modify a scrap script.
+Our goal was to have the mean player market value for every team in the 5 biggest championships and for the last 10 years. That means from 2010 to 2019.</p>
+<p>These leagues are:</p>
+<ul>
+<li><p>“Premiere League” for United-Kingdom championship</p></li>
+<li><p>“La Liga” for Spain championship</p></li>
+<li><p>“Serie A” for Italy championship</p></li>
+<li><p>“Bundesliga” for Germany championship</p></li>
+<li><p>“Ligue 1” for France championship</p></li>
+</ul>
+<p>Unfortunetly we didn’t found any table online for the ranking so we have choosen to build this table on our own based on others tables found on this <a href="http://www.football-data.co.uk">link</a>. We have then extract 50 tables from this website summarizing the results of each match in the 5 championships during 10 years. With these tables we have built a function <code>for</code> to have the ranking at the end of the season. After that we have renamed around 200 teams names manually to match our new ranking table with the market value table built with <code>scrap_transfertmarkt.R</code> Finally after left_joining both tables we have our <code>mw_table</code> on which we could start the work.</p>
+<p>You can find our <code>scrap_transfertmarkt.R</code> and our <code>table-building.R</code> scripts in the <code>Table_building</code> file in our project. Furthermore, we have decided to put the <code>mw_table</code> directly in our <code>Data</code> file for practical reasons but it can be found by just running the <code>table-building.R</code> script.</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-arti1">
+<p>William, Plumme. 2017. “Comment Les Prix Ont Explosé Sur Le Marché Des Transferts,” August.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="exploratory-data-analysis.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

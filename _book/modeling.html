@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Modeling | Project Group 9 : The influence of market value in football</title>
+  <meta name="description" content="3 Modeling | Project Group 9 : The influence of market value in football" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Modeling | Project Group 9 : The influence of market value in football" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Modeling | Project Group 9 : The influence of market value in football" />
+  
+  
+  
+
+<meta name="author" content="BAEUMLIN Thomas, RENGER Hadrien" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="exploratory-data-analysis.html"/>
+<link rel="next" href="conclusion.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#why-this-subject"><i class="fa fa-check"></i><b>1.1</b> Why this subject ?</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#description-of-the-data"><i class="fa fa-check"></i><b>1.2</b> Description of the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#a-high-evolution-in-term-of-player-market-value"><i class="fa fa-check"></i><b>2.1</b> A high evolution in term of player market value</a></li>
+<li class="chapter" data-level="2.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-power-of-money"><i class="fa fa-check"></i><b>2.2</b> The power of money</a></li>
+<li class="chapter" data-level="2.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#disparities-in-football"><i class="fa fa-check"></i><b>2.3</b> Disparities in Football</a></li>
+<li class="chapter" data-level="2.4" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-champions-league"><i class="fa fa-check"></i><b>2.4</b> The Champions League</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>3</b> Modeling</a><ul>
+<li class="chapter" data-level="3.1" data-path="modeling.html"><a href="modeling.html#model"><i class="fa fa-check"></i><b>3.1</b> Model</a></li>
+<li class="chapter" data-level="3.2" data-path="modeling.html"><a href="modeling.html#goodness-of-fit"><i class="fa fa-check"></i><b>3.2</b> Goodness of fit</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Project Group 9 : The influence of market value in football</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="modeling" class="section level1">
+<h1><span class="header-section-number">3</span> Modeling</h1>
+<p>In this section we will try to understand the impact of the market value on the final ranking by first, building a model and have a look at all the parameters
+Then assess the goodness of fit and see if we can predict some good results.</p>
+<p>Let’s start by plotting a scatterplot of the number of points regarding the market values:</p>
+<div class="figure" style="text-align: center"><span id="fig:graph-point"></span>
+<img src="Project_Group9_report_files/figure-html/graph-point-1.png" alt="Distribution" width="70%" />
+<p class="caption">
+Figure 3.1: Distribution
+</p>
+</div>
+<p>We can see in <a href="modeling.html#fig:graph-point">3.1</a> graph that the number of points increase exponentially with the market value. In order to have better results we will apply the logarithm function <a href="modeling.html#fig:graph-pointlog">3.2</a> on the market value to have linear distribution and then use a linear model.</p>
+<div class="figure" style="text-align: center"><span id="fig:graph-pointlog"></span>
+<img src="Project_Group9_report_files/figure-html/graph-pointlog-1.png" alt="Log Distribution" width="70%" />
+<p class="caption">
+Figure 3.2: Log Distribution
+</p>
+</div>
+<div id="model" class="section level2">
+<h2><span class="header-section-number">3.1</span> Model</h2>
+<p>Our model is based on the following formula
+* <code>points ~ log(mw) + name + year</code>.
+Furthermore we will use the <code>linear least square method</code> to fit all the parameters.</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:model-parameters">Table 3.1: </span>Summary of the model for Premier League
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Standard Error
+</th>
+<th style="text-align:right;">
+P-value
+</th>
+<th style="text-align:left;">
+Significance
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1177.293
+</td>
+<td style="text-align:right;">
+262.983
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+logmw
+</td>
+<td style="text-align:right;">
+14.695
+</td>
+<td style="text-align:right;">
+0.464
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+-0.567
+</td>
+<td style="text-align:right;">
+0.131
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+</tbody>
+</table>
+<p><a href="modeling.html#tab:model-parameters">3.1</a> is the list of the parameters and their estimates. We can see that the logmw increase the number of point and it’s a very good point for our assumption. The intercept is very high but it balanced the year coefficent which is -0.464 (*2010 for instance). Furthermore we can see that only biggest teams have a significant estimate as Man City, Real Madrid, Barcelona etc.. with very high value, around 30. There is of course an impact of the team on the ranking. All others teams have a value which are not very significant, it could be the case because their market values are quite all the same under the 10th rank and their number of points are then more difficult to differentiate and predict.</p>
+<p>Here <a href="modeling.html#tab:summary-table">3.2</a> we have compared the Rsquared adjusted of two models:</p>
+<ul>
+<li><code>points ~ log(mw) + name + year</code>.
+<ul>
+<li><code>ranking ~ log(mw) + name + year</code>.</li>
+</ul></li>
+</ul>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:summary-table">Table 3.2: </span>Summary of the model with points
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.506
+</td>
+<td style="text-align:right;">
+0.505
+</td>
+<td style="text-align:right;">
+11.6
+</td>
+<td style="text-align:right;">
+501
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-3792
+</td>
+<td style="text-align:right;">
+7593
+</td>
+<td style="text-align:right;">
+7612
+</td>
+<td style="text-align:right;">
+131848
+</td>
+<td style="text-align:right;">
+977
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-8">Table 3.3: </span>Summary of the model with rank
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.506
+</td>
+<td style="text-align:right;">
+0.505
+</td>
+<td style="text-align:right;">
+11.6
+</td>
+<td style="text-align:right;">
+501
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-3792
+</td>
+<td style="text-align:right;">
+7593
+</td>
+<td style="text-align:right;">
+7612
+</td>
+<td style="text-align:right;">
+131848
+</td>
+<td style="text-align:right;">
+977
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can see that the Rsquared adjusted is around 68% in the point model against 59% in the ranking model, that is why we have prefered to take the number rather than the ranking.</p>
+<p>68% is quite good results for our small number of explained variables.</p>
+</div>
+<div id="goodness-of-fit" class="section level2">
+<h2><span class="header-section-number">3.2</span> Goodness of fit</h2>
+<p>To Discuss the goodness of the fit we will plot the residuals and have a look at some predictions made by our model.</p>
+<div class="figure" style="text-align: center"><span id="fig:residuals-fig"></span>
+<img src="Project_Group9_report_files/figure-html/residuals-fig-1.png" alt="Residuals vs Log Market value" width="70%" />
+<p class="caption">
+Figure 3.3: Residuals vs Log Market value
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:residuals-fig2"></span>
+<img src="Project_Group9_report_files/figure-html/residuals-fig2-1.png" alt="Residuals vs fitted values" width="70%" />
+<p class="caption">
+Figure 3.4: Residuals vs fitted values
+</p>
+</div>
+<p>The residuals graphs <a href="modeling.html#fig:residuals-fig">3.3</a> and <a href="modeling.html#fig:residuals-fig2">3.4</a> are well randomly spread with a mean of zero for the log market value and for the fitted graph. It is a good point for our model since their is no clear pattern in the residuals.</p>
+<div class="figure" style="text-align: center"><span id="fig:pred-figure"></span>
+<img src="Project_Group9_report_files/figure-html/pred-figure-1.png" alt=" Prediction graphs" width="70%" />
+<p class="caption">
+Figure 3.5:  Prediction graphs
+</p>
+</div>
+<p>In the last graph of our project we have built a function that takes into account the fitted number of points reach by each team and used it to build a ranking.
+We have then built this graph <a href="modeling.html#fig:pred-figure">3.5</a> to have a view on our prediction against the observed ranking. We have selected some years and championships to illustrate this. As we can see it predict quite well the ranking with obviously some mistakes but they are quite small in terms of ranking. In fact we have seen in the residuals graphs <a href="modeling.html#fig:residuals-fig">3.3</a> that our errors are in majority under 10 points, it seems high,but in terms of ranking 10 points represent approximately 4 places depending on the season. As you can see, our errors in terms of ranking are quite small and we predict well from the 1st rank to the 10th, but after the 10th rank it is more difficult as there is not a lot of differentiation in term of market values</p>
+<p>Our Model describes well the big influence of the market value in football. However, our model has some boundaries in our assumption. Indeed, it does not just take into account the market value but also the team… As you can imagine the estimate for Barcelona is not the same as the one for Toulouse. For instance, if tomorrow Barcelona become a low-ranking team with small market value for whatever reason, our model will still fit a high number of points because of the “background” of the club the previous years.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="exploratory-data-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

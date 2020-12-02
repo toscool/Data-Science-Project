@@ -1,0 +1,14 @@
+book_filename: "Project_Group9_report"
+
+before_chapter_script: "scripts/setup.R"
+
+# new_session: yes
+
+rmd_files: [
+  "index.Rmd",
+  "report/Introduction.Rmd",
+  "report/eda.Rmd",
+  "report/Modelling.Rmd",
+  "report/Conclusion.Rmd",
+  "report/references.Rmd",
+]

@@ -1,0 +1,1446 @@
+
+```{r, warning=FALSE, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(modelr)
+library(broom)
+library(ggplot2)
+library(kableExtra)
+library(here)
+
+#load market value data
+load(here("Data/salary_data.RData"))
+
+#load Eangland
+PremierLeague2010=read_csv(here("Data//England/PremierLeague2010.csv"))
+PremierLeague2011=read_csv(here("Data//England/PremierLeague2011.csv"))
+PremierLeague2012=read_csv(here("Data//England/PremierLeague2012.csv"))
+PremierLeague2013=read_csv(here("Data//England/PremierLeague2013.csv"))
+PremierLeague2014=read_csv(here("Data//England/PremierLeague2014.csv"))
+PremierLeague2015=read_csv(here("Data//England/PremierLeague2015.csv"))
+PremierLeague2015=PremierLeague2015[-381,]
+PremierLeague2016=read_csv(here("Data//England/PremierLeague2016.csv"))
+PremierLeague2017=read_csv(here("Data//England/PremierLeague2017.csv"))
+PremierLeague2018=read_csv(here("Data//England/PremierLeague2018.csv"))
+PremierLeague2019=read_csv(here("Data//England/PremierLeague2019.csv"))
+
+#load Germany
+Bundesligua2010=read_csv(here("Data//Germany/Bundesliga2010.cvs.csv"))
+Bundesligua2011=read_csv(here("Data//Germany/Bundesliga2011.cvs.csv"))
+Bundesligua2012=read_csv(here("Data//Germany/Bundesliga2012.cvs.csv"))
+Bundesligua2013=read_csv(here("Data//Germany/Bundesliga2013.cvs.csv"))
+Bundesligua2014=read_csv(here("Data//Germany/Bundesliga2014.cvs.csv"))
+Bundesligua2015=read_csv(here("Data//Germany/Bundesliga2015.cvs.csv"))
+Bundesligua2016=read_csv(here("Data//Germany/Bundesliga2016.cvs.csv"))
+Bundesligua2017=read_csv(here("Data//Germany/Bundesliga2017.cvs.csv"))
+Bundesligua2018=read_csv(here("Data//Germany/Bundesliga2018.cvs.csv"))
+Bundesligua2019=read_csv(here("Data//Germany/Bundesliga2019.cvs.csv"))
+
+#load ligue1
+Ligue1_2010=read_csv(here("Data//France/Ligue1_2010.csv"))
+Ligue1_2011=read_csv(here("Data//France/Ligue1_2011.csv"))
+Ligue1_2012=read_csv(here("Data//France/Ligue1_2012.csv"))
+Ligue1_2013=read_csv(here("Data//France/Ligue1_2013.csv"))
+Ligue1_2014=read_csv(here("Data//France/Ligue1_2014.csv"))
+Ligue1_2014=Ligue1_2014[-381,] # row with NA value
+Ligue1_2015=read_csv(here("Data//France/Ligue1_2015.csv"))
+Ligue1_2016=read_csv(here("Data//France/Ligue1_2016.csv"))
+Ligue1_2016=Ligue1_2016[-381,]# row with NA value
+Ligue1_2017=read_csv(here("Data//France/Ligue1_2017.csv"))
+Ligue1_2018=read_csv(here("Data//France/Ligue1_2018.csv"))
+Ligue1_2019=read_csv(here("Data//France/Ligue1_2019.csv"))
+
+#load Italy
+
+SerieA2010=read_csv(here("Data//Italy/SerieA2010.cvs.csv"))
+SerieA2011=read_csv(here("Data//Italy/SerieA2011.cvs.csv"))
+SerieA2012=read_csv(here("Data//Italy/SerieA2012.cvs.csv"))
+SerieA2013=read_csv(here("Data//Italy/SerieA2013.cvs.csv"))
+SerieA2013=SerieA2013[c(-381,-382,-383),] # row with NA value
+SerieA2014=read_csv(here("Data//Italy/SerieA2014.cvs.csv"))
+SerieA2015=read_csv(here("Data//Italy/SerieA2015.cvs.csv"))
+SerieA2015=SerieA2015[-381,] # row with NA value
+SerieA2016=read_csv(here("Data//Italy/SerieA2016.cvs.csv"))
+SerieA2016=SerieA2016[-381,] # row with NA value
+SerieA2017=read_csv(here("Data//Italy/SerieA2017.cvs.csv"))
+SerieA2018=read_csv(here("Data//Italy/SerieA2018.cvs.csv"))
+SerieA2019=read_csv(here("Data//Italy/SerieA2019.cvs.csv"))
+
+#load Spain
+
+LigueEspagnol2010=read_csv(here("Data//Spain/LigueEspagnol2010.csv"))
+LigueEspagnol2011=read_csv(here("Data//Spain/LigueEspagnol2011.csv"))
+LigueEspagnol2012=read_csv(here("Data//Spain/LigueEspagnol2012.csv"))
+LigueEspagnol2013=read_csv(here("Data//Spain/LigueEspagnol2013.csv"))
+LigueEspagnol2014=read_csv(here("Data//Spain/LigueEspagnol2014.csv"))
+LigueEspagnol2015=read_csv(here("Data//Spain/LigueEspagnol2015.csv"))
+LigueEspagnol2016=read_csv(here("Data//Spain/LigueEspagnol2016.csv"))
+LigueEspagnol2017=read_csv(here("Data//Spain/LigueEspagnol2017.csv"))
+LigueEspagnol2018=read_csv(here("Data//Spain/LigueEspagnol2018.csv"))
+LigueEspagnol2019=read_csv(here("Data//Spain/LigueEspagnol2019.csv"))
+
+
+```
+
+
+
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2019=data_frame(team= as.factor(unique(Ligue1_2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2019)){ 
+  
+  if(Ligue1_2019$FTR[j]=="H"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2019$FTR[j]=="D"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]+1
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2019$FTR[j]=="A"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2019=arrange(ranking_Ligue1_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2019)), league="Ligue 1", year=2019)%>% rename(name=team)
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2019=data_frame(team= as.factor(unique(Ligue1_2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2019)){ 
+  
+  if(Ligue1_2019$FTR[j]=="H"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2019$FTR[j]=="D"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$HomeTeam[j]),2]+1
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2019$FTR[j]=="A"){
+    ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]=ranking_Ligue1_2019[ranking_Ligue1_2019$team==as.character(Ligue1_2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2019=arrange(ranking_Ligue1_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2019)), league="Ligue 1", year=2019)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2018=data_frame(team= as.factor(unique(Ligue1_2018$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2018)){ 
+  
+  if(Ligue1_2018$FTR[j]=="H"){
+    ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$HomeTeam[j]),2]=ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2018$FTR[j]=="D"){
+    ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$HomeTeam[j]),2]=ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$HomeTeam[j]),2]+1
+    ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$AwayTeam[j]),2]=ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2018$FTR[j]=="A"){
+    ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$AwayTeam[j]),2]=ranking_Ligue1_2018[ranking_Ligue1_2018$team==as.character(Ligue1_2018$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2018=arrange(ranking_Ligue1_2018,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2018)), league="Ligue 1", year=2018)%>% rename(name=team)
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2017=data_frame(team= as.factor(unique(Ligue1_2017$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2017)){ 
+  
+  if(Ligue1_2017$FTR[j]=="H"){
+    ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$HomeTeam[j]),2]=ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2017$FTR[j]=="D"){
+    ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$HomeTeam[j]),2]=ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$HomeTeam[j]),2]+1
+    ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$AwayTeam[j]),2]=ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2017$FTR[j]=="A"){
+    ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$AwayTeam[j]),2]=ranking_Ligue1_2017[ranking_Ligue1_2017$team==as.character(Ligue1_2017$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2017=arrange(ranking_Ligue1_2017,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2017)), league="Ligue 1", year=2017)%>% rename(name=team)
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2016=data_frame(team= as.factor(unique(Ligue1_2016$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2016)){ 
+  
+  if(Ligue1_2016$FTR[j]=="H"){
+    ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$HomeTeam[j]),2]=ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2016$FTR[j]=="D"){
+    ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$HomeTeam[j]),2]=ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$HomeTeam[j]),2]+1
+    ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$AwayTeam[j]),2]=ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2016$FTR[j]=="A"){
+    ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$AwayTeam[j]),2]=ranking_Ligue1_2016[ranking_Ligue1_2016$team==as.character(Ligue1_2016$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2016=arrange(ranking_Ligue1_2016,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2016)), league="Ligue 1", year=2016)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2015=data_frame(team= as.factor(unique(Ligue1_2015$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2015)){ 
+  
+  if(Ligue1_2015$FTR[j]=="H"){
+    ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$HomeTeam[j]),2]=ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2015$FTR[j]=="D"){
+    ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$HomeTeam[j]),2]=ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$HomeTeam[j]),2]+1
+    ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$AwayTeam[j]),2]=ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2015$FTR[j]=="A"){
+    ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$AwayTeam[j]),2]=ranking_Ligue1_2015[ranking_Ligue1_2015$team==as.character(Ligue1_2015$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2015=arrange(ranking_Ligue1_2015,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2015)), league="Ligue 1", year=2015)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2014=data_frame(team= as.factor(unique(Ligue1_2014$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2014)){ 
+  
+  if(Ligue1_2014$FTR[j]=="H"){
+    ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$HomeTeam[j]),2]=ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2014$FTR[j]=="D"){
+    ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$HomeTeam[j]),2]=ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$HomeTeam[j]),2]+1
+    ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$AwayTeam[j]),2]=ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2014$FTR[j]=="A"){
+    ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$AwayTeam[j]),2]=ranking_Ligue1_2014[ranking_Ligue1_2014$team==as.character(Ligue1_2014$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2014=arrange(ranking_Ligue1_2014,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2014)), league="Ligue 1", year=2014)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2013=data_frame(team= as.factor(unique(Ligue1_2013$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2013)){ 
+  
+  if(Ligue1_2013$FTR[j]=="H"){
+    ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$HomeTeam[j]),2]=ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2013$FTR[j]=="D"){
+    ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$HomeTeam[j]),2]=ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$HomeTeam[j]),2]+1
+    ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$AwayTeam[j]),2]=ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2013$FTR[j]=="A"){
+    ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$AwayTeam[j]),2]=ranking_Ligue1_2013[ranking_Ligue1_2013$team==as.character(Ligue1_2013$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2013=arrange(ranking_Ligue1_2013,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2013)), league="Ligue 1", year=2013)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2012=data_frame(team= as.factor(unique(Ligue1_2012$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2012)){ 
+  
+  if(Ligue1_2012$FTR[j]=="H"){
+    ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$HomeTeam[j]),2]=ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2012$FTR[j]=="D"){
+    ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$HomeTeam[j]),2]=ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$HomeTeam[j]),2]+1
+    ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$AwayTeam[j]),2]=ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2012$FTR[j]=="A"){
+    ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$AwayTeam[j]),2]=ranking_Ligue1_2012[ranking_Ligue1_2012$team==as.character(Ligue1_2012$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2012=arrange(ranking_Ligue1_2012,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2012)), league="Ligue 1", year=2012)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2011=data_frame(team= as.factor(unique(Ligue1_2011$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2011)){ 
+  
+  if(Ligue1_2011$FTR[j]=="H"){
+    ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$HomeTeam[j]),2]=ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2011$FTR[j]=="D"){
+    ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$HomeTeam[j]),2]=ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$HomeTeam[j]),2]+1
+    ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$AwayTeam[j]),2]=ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2011$FTR[j]=="A"){
+    ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$AwayTeam[j]),2]=ranking_Ligue1_2011[ranking_Ligue1_2011$team==as.character(Ligue1_2011$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2011=arrange(ranking_Ligue1_2011,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2011)), league="Ligue 1", year=2011)%>% rename(name=team)
+
+```
+
+```{r}
+#ligue 1 
+ranking_Ligue1_2010=data_frame(team= as.factor(unique(Ligue1_2010$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Ligue1_2010)){ 
+  
+  if(Ligue1_2010$FTR[j]=="H"){
+    ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$HomeTeam[j]),2]=ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$HomeTeam[j]),2]+3
+  } 
+  if(Ligue1_2010$FTR[j]=="D"){
+    ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$HomeTeam[j]),2]=ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$HomeTeam[j]),2]+1
+    ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$AwayTeam[j]),2]=ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$AwayTeam[j]),2]+1
+  }
+  if(Ligue1_2010$FTR[j]=="A"){
+    ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$AwayTeam[j]),2]=ranking_Ligue1_2010[ranking_Ligue1_2010$team==as.character(Ligue1_2010$AwayTeam[j]),2]+3
+  }
+}
+ranking_Ligue1_2010=arrange(ranking_Ligue1_2010,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Ligue1_2010)), league="Ligue 1", year=2010)%>% rename(name=team)
+
+```
+
+
+
+```{r}
+#Bundesliga 
+ranking_Bundesligua_2019=data_frame(team= as.factor(unique(Bundesligua2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2019)){ 
+  
+  if(Bundesligua2019$FTR[j]=="H"){
+    ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$HomeTeam[j]),2]=ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2019$FTR[j]=="D"){
+    ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$HomeTeam[j]),2]=ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$AwayTeam[j]),2]=ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2019$FTR[j]=="A"){
+    ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$AwayTeam[j]),2]=ranking_Bundesligua_2019[ranking_Bundesligua_2019$team==as.character(Bundesligua2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2019=arrange(ranking_Bundesligua_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2019)), league="1. Bundesliga", year=2019)%>% rename(name=team)
+```
+
+
+```{r}
+#ligue 1 
+ranking_Bundesligua_2018=data_frame(team= as.factor(unique(Bundesligua2018$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2018)){ 
+  
+  if(Bundesligua2018$FTR[j]=="H"){
+    ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$HomeTeam[j]),2]=ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2018$FTR[j]=="D"){
+    ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$HomeTeam[j]),2]=ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$AwayTeam[j]),2]=ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2018$FTR[j]=="A"){
+    ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$AwayTeam[j]),2]=ranking_Bundesligua_2018[ranking_Bundesligua_2018$team==as.character(Bundesligua2018$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2018=arrange(ranking_Bundesligua_2018,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2018)), league="1. Bundesliga", year=2018)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga 
+ranking_Bundesligua_2017=data_frame(team= as.factor(unique(Bundesligua2017$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2017)){ 
+  
+  if(Bundesligua2017$FTR[j]=="H"){
+    ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$HomeTeam[j]),2]=ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2017$FTR[j]=="D"){
+    ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$HomeTeam[j]),2]=ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$AwayTeam[j]),2]=ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2017$FTR[j]=="A"){
+    ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$AwayTeam[j]),2]=ranking_Bundesligua_2017[ranking_Bundesligua_2017$team==as.character(Bundesligua2017$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2017=arrange(ranking_Bundesligua_2017,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2017)), league="1. Bundesliga", year=2017)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2016=data_frame(team= as.factor(unique(Bundesligua2016$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2016)){ 
+  
+  if(Bundesligua2016$FTR[j]=="H"){
+    ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$HomeTeam[j]),2]=ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2016$FTR[j]=="D"){
+    ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$HomeTeam[j]),2]=ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$AwayTeam[j]),2]=ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2016$FTR[j]=="A"){
+    ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$AwayTeam[j]),2]=ranking_Bundesligua_2016[ranking_Bundesligua_2016$team==as.character(Bundesligua2016$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2016=arrange(ranking_Bundesligua_2016,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2016)), league="1. Bundesliga", year=2016)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2015=data_frame(team= as.factor(unique(Bundesligua2015$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2015)){ 
+  
+  if(Bundesligua2015$FTR[j]=="H"){
+    ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$HomeTeam[j]),2]=ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2015$FTR[j]=="D"){
+    ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$HomeTeam[j]),2]=ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$AwayTeam[j]),2]=ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2015$FTR[j]=="A"){
+    ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$AwayTeam[j]),2]=ranking_Bundesligua_2015[ranking_Bundesligua_2015$team==as.character(Bundesligua2015$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2015=arrange(ranking_Bundesligua_2015,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2015)), league="1. Bundesliga", year=2015)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2014=data_frame(team= as.factor(unique(Bundesligua2014$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2014)){ 
+  
+  if(Bundesligua2014$FTR[j]=="H"){
+    ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$HomeTeam[j]),2]=ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2014$FTR[j]=="D"){
+    ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$HomeTeam[j]),2]=ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$AwayTeam[j]),2]=ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2014$FTR[j]=="A"){
+    ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$AwayTeam[j]),2]=ranking_Bundesligua_2014[ranking_Bundesligua_2014$team==as.character(Bundesligua2014$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2014=arrange(ranking_Bundesligua_2014,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2014)), league="1. Bundesliga", year=2014)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2013=data_frame(team= as.factor(unique(Bundesligua2013$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2013)){ 
+  
+  if(Bundesligua2013$FTR[j]=="H"){
+    ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$HomeTeam[j]),2]=ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2013$FTR[j]=="D"){
+    ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$HomeTeam[j]),2]=ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$AwayTeam[j]),2]=ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2013$FTR[j]=="A"){
+    ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$AwayTeam[j]),2]=ranking_Bundesligua_2013[ranking_Bundesligua_2013$team==as.character(Bundesligua2013$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2013=arrange(ranking_Bundesligua_2013,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2013)), league="1. Bundesliga", year=2013)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2012=data_frame(team= as.factor(unique(Bundesligua2012$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2012)){ 
+  
+  if(Bundesligua2012$FTR[j]=="H"){
+    ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$HomeTeam[j]),2]=ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2012$FTR[j]=="D"){
+    ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$HomeTeam[j]),2]=ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$AwayTeam[j]),2]=ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2012$FTR[j]=="A"){
+    ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$AwayTeam[j]),2]=ranking_Bundesligua_2012[ranking_Bundesligua_2012$team==as.character(Bundesligua2012$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2012=arrange(ranking_Bundesligua_2012,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2012)), league="1. Bundesliga", year=2012)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2011=data_frame(team= as.factor(unique(Bundesligua2011$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2011)){ 
+  
+  if(Bundesligua2011$FTR[j]=="H"){
+    ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$HomeTeam[j]),2]=ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2011$FTR[j]=="D"){
+    ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$HomeTeam[j]),2]=ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$AwayTeam[j]),2]=ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2011$FTR[j]=="A"){
+    ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$AwayTeam[j]),2]=ranking_Bundesligua_2011[ranking_Bundesligua_2011$team==as.character(Bundesligua2011$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2011=arrange(ranking_Bundesligua_2011,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2011)), league="1. Bundesliga", year=2011)%>% rename(name=team)
+```
+
+
+```{r}
+#Bundesliga
+ranking_Bundesligua_2010=data_frame(team= as.factor(unique(Bundesligua2010$HomeTeam)),points= 0)
+
+for (j in 1:nrow(Bundesligua2010)){ 
+  
+  if(Bundesligua2010$FTR[j]=="H"){
+    ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$HomeTeam[j]),2]=ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$HomeTeam[j]),2]+3
+  } 
+  if(Bundesligua2010$FTR[j]=="D"){
+    ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$HomeTeam[j]),2]=ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$HomeTeam[j]),2]+1
+    ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$AwayTeam[j]),2]=ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$AwayTeam[j]),2]+1
+  }
+  if(Bundesligua2010$FTR[j]=="A"){
+    ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$AwayTeam[j]),2]=ranking_Bundesligua_2010[ranking_Bundesligua_2010$team==as.character(Bundesligua2010$AwayTeam[j]),2]+3
+  }
+}
+ranking_Bundesligua_2010=arrange(ranking_Bundesligua_2010,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_Bundesligua_2010)), league="1. Bundesliga", year=2010)%>% rename(name=team)
+```
+
+
+```{r}
+#Serie A
+ranking_SerieA_2019=data_frame(team= as.factor(unique(SerieA2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2019)){ 
+  
+  if(SerieA2019$FTR[j]=="H"){
+    ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$HomeTeam[j]),2]=ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2019$FTR[j]=="D"){
+    ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$HomeTeam[j]),2]=ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$HomeTeam[j]),2]+1
+    ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$AwayTeam[j]),2]=ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$AwayTeam[j]),2]+1
+  }
+  if(SerieA2019$FTR[j]=="A"){
+    ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$AwayTeam[j]),2]=ranking_SerieA_2019[ranking_SerieA_2019$team==as.character(SerieA2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2019=arrange(ranking_SerieA_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2019)), league="Serie A", year=2019)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2018=data_frame(team= as.factor(unique(SerieA2018$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2018)){ 
+  
+  if(SerieA2018$FTR[j]=="H"){
+    ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$HomeTeam[j]),2]=ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2018$FTR[j]=="D"){
+    ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$HomeTeam[j]),2]=ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$HomeTeam[j]),2]+1
+    ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$AwayTeam[j]),2]=ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$AwayTeam[j]),2]+1
+  }
+  if(SerieA2018$FTR[j]=="A"){
+    ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$AwayTeam[j]),2]=ranking_SerieA_2018[ranking_SerieA_2018$team==as.character(SerieA2018$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2018=arrange(ranking_SerieA_2018,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2018)), league="Serie A", year=2018)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2017=data_frame(team= as.factor(unique(SerieA2017$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2017)){ 
+  
+  if(SerieA2017$FTR[j]=="H"){
+    ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$HomeTeam[j]),2]=ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2017$FTR[j]=="D"){
+    ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$HomeTeam[j]),2]=ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$HomeTeam[j]),2]+1
+    ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$AwayTeam[j]),2]=ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$AwayTeam[j]),2]+1
+  }
+  if(SerieA2017$FTR[j]=="A"){
+    ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$AwayTeam[j]),2]=ranking_SerieA_2017[ranking_SerieA_2017$team==as.character(SerieA2017$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2017=arrange(ranking_SerieA_2017,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2017)), league="Serie A", year=2017)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2016=data_frame(team= as.factor(unique(SerieA2016$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2016)){ 
+  
+  if(SerieA2016$FTR[j]=="H"){
+    ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$HomeTeam[j]),2]=ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2016$FTR[j]=="D"){
+    ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$HomeTeam[j]),2]=ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$HomeTeam[j]),2]+1
+    ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$AwayTeam[j]),2]=ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$AwayTeam[j]),2]+1
+  }
+  if(SerieA2016$FTR[j]=="A"){
+    ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$AwayTeam[j]),2]=ranking_SerieA_2016[ranking_SerieA_2016$team==as.character(SerieA2016$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2016=arrange(ranking_SerieA_2016,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2016)), league="Serie A", year=2016)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2015=data_frame(team= as.factor(unique(SerieA2015$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2015)){ 
+  
+  if(SerieA2015$FTR[j]=="H"){
+    ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$HomeTeam[j]),2]=ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2015$FTR[j]=="D"){
+    ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$HomeTeam[j]),2]=ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$HomeTeam[j]),2]+1
+    ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$AwayTeam[j]),2]=ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$AwayTeam[j]),2]+1
+  }
+  if(SerieA2015$FTR[j]=="A"){
+    ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$AwayTeam[j]),2]=ranking_SerieA_2015[ranking_SerieA_2015$team==as.character(SerieA2015$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2015=arrange(ranking_SerieA_2015,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2015)), league="Serie A", year=2015)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2014=data_frame(team= as.factor(unique(SerieA2014$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2014)){ 
+  
+  if(SerieA2014$FTR[j]=="H"){
+    ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$HomeTeam[j]),2]=ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2014$FTR[j]=="D"){
+    ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$HomeTeam[j]),2]=ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$HomeTeam[j]),2]+1
+    ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$AwayTeam[j]),2]=ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$AwayTeam[j]),2]+1
+  }
+  if(SerieA2014$FTR[j]=="A"){
+    ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$AwayTeam[j]),2]=ranking_SerieA_2014[ranking_SerieA_2014$team==as.character(SerieA2014$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2014=arrange(ranking_SerieA_2014,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2014)), league="Serie A", year=2014)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2013=data_frame(team= as.factor(unique(SerieA2013$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2013)){ 
+  
+  if(SerieA2013$FTR[j]=="H"){
+    ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$HomeTeam[j]),2]=ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2013$FTR[j]=="D"){
+    ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$HomeTeam[j]),2]=ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$HomeTeam[j]),2]+1
+    ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$AwayTeam[j]),2]=ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$AwayTeam[j]),2]+1
+  }
+  if(SerieA2013$FTR[j]=="A"){
+    ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$AwayTeam[j]),2]=ranking_SerieA_2013[ranking_SerieA_2013$team==as.character(SerieA2013$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2013=arrange(ranking_SerieA_2013,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2013)), league="Serie A", year=2013)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2012=data_frame(team= as.factor(unique(SerieA2012$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2012)){ 
+  
+  if(SerieA2012$FTR[j]=="H"){
+    ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$HomeTeam[j]),2]=ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2012$FTR[j]=="D"){
+    ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$HomeTeam[j]),2]=ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$HomeTeam[j]),2]+1
+    ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$AwayTeam[j]),2]=ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$AwayTeam[j]),2]+1
+  }
+  if(SerieA2012$FTR[j]=="A"){
+    ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$AwayTeam[j]),2]=ranking_SerieA_2012[ranking_SerieA_2012$team==as.character(SerieA2012$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2012=arrange(ranking_SerieA_2012,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2012)), league="Serie A", year=2012)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2011=data_frame(team= as.factor(unique(SerieA2011$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2011)){ 
+  
+  if(SerieA2011$FTR[j]=="H"){
+    ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$HomeTeam[j]),2]=ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2011$FTR[j]=="D"){
+    ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$HomeTeam[j]),2]=ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$HomeTeam[j]),2]+1
+    ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$AwayTeam[j]),2]=ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$AwayTeam[j]),2]+1
+  }
+  if(SerieA2011$FTR[j]=="A"){
+    ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$AwayTeam[j]),2]=ranking_SerieA_2011[ranking_SerieA_2011$team==as.character(SerieA2011$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2011=arrange(ranking_SerieA_2011,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2011)), league="Serie A", year=2011)%>% rename(name=team)
+```
+
+```{r}
+#Serie A
+ranking_SerieA_2010=data_frame(team= as.factor(unique(SerieA2010$HomeTeam)),points= 0)
+
+for (j in 1:nrow(SerieA2010)){ 
+  
+  if(SerieA2010$FTR[j]=="H"){
+    ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$HomeTeam[j]),2]=ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$HomeTeam[j]),2]+3
+  } 
+  if(SerieA2010$FTR[j]=="D"){
+    ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$HomeTeam[j]),2]=ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$HomeTeam[j]),2]+1
+    ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$AwayTeam[j]),2]=ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$AwayTeam[j]),2]+1
+  }
+  if(SerieA2010$FTR[j]=="A"){
+    ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$AwayTeam[j]),2]=ranking_SerieA_2010[ranking_SerieA_2010$team==as.character(SerieA2010$AwayTeam[j]),2]+3
+  }
+}
+ranking_SerieA_2010=arrange(ranking_SerieA_2010,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_SerieA_2010)), league="Serie A", year=2010)%>% rename(name=team)
+```
+
+
+```{r}
+#Premier League
+ranking_PremierLeague_2019=data_frame(team= as.factor(unique(PremierLeague2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2019)){ 
+  
+  if(PremierLeague2019$FTR[j]=="H"){
+    ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$HomeTeam[j]),2]=ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2019$FTR[j]=="D"){
+    ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$HomeTeam[j]),2]=ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$AwayTeam[j]),2]=ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2019$FTR[j]=="A"){
+    ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$AwayTeam[j]),2]=ranking_PremierLeague_2019[ranking_PremierLeague_2019$team==as.character(PremierLeague2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2019=arrange(ranking_PremierLeague_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2019)), league="Premier League", year=2019)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2018=data_frame(team= as.factor(unique(PremierLeague2018$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2018)){ 
+  
+  if(PremierLeague2018$FTR[j]=="H"){
+    ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$HomeTeam[j]),2]=ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2018$FTR[j]=="D"){
+    ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$HomeTeam[j]),2]=ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$AwayTeam[j]),2]=ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2018$FTR[j]=="A"){
+    ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$AwayTeam[j]),2]=ranking_PremierLeague_2018[ranking_PremierLeague_2018$team==as.character(PremierLeague2018$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2018=arrange(ranking_PremierLeague_2018,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2018)), league="Premier League", year=2018)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2017=data_frame(team= as.factor(unique(PremierLeague2017$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2017)){ 
+  
+  if(PremierLeague2017$FTR[j]=="H"){
+    ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$HomeTeam[j]),2]=ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2017$FTR[j]=="D"){
+    ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$HomeTeam[j]),2]=ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$AwayTeam[j]),2]=ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2017$FTR[j]=="A"){
+    ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$AwayTeam[j]),2]=ranking_PremierLeague_2017[ranking_PremierLeague_2017$team==as.character(PremierLeague2017$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2017=arrange(ranking_PremierLeague_2017,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2017)), league="Premier League", year=2017)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2016=data_frame(team= as.factor(unique(PremierLeague2016$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2016)){ 
+  
+  if(PremierLeague2016$FTR[j]=="H"){
+    ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$HomeTeam[j]),2]=ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2016$FTR[j]=="D"){
+    ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$HomeTeam[j]),2]=ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$AwayTeam[j]),2]=ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2016$FTR[j]=="A"){
+    ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$AwayTeam[j]),2]=ranking_PremierLeague_2016[ranking_PremierLeague_2016$team==as.character(PremierLeague2016$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2016=arrange(ranking_PremierLeague_2016,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2016)), league="Premier League", year=2016)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2015=data_frame(team= as.factor(unique(PremierLeague2015$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2015)){ 
+  
+  if(PremierLeague2015$FTR[j]=="H"){
+    ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$HomeTeam[j]),2]=ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2015$FTR[j]=="D"){
+    ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$HomeTeam[j]),2]=ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$AwayTeam[j]),2]=ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2015$FTR[j]=="A"){
+    ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$AwayTeam[j]),2]=ranking_PremierLeague_2015[ranking_PremierLeague_2015$team==as.character(PremierLeague2015$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2015=arrange(ranking_PremierLeague_2015,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2015)), league="Premier League", year=2015)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2014=data_frame(team= as.factor(unique(PremierLeague2014$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2014)){ 
+  
+  if(PremierLeague2014$FTR[j]=="H"){
+    ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$HomeTeam[j]),2]=ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2014$FTR[j]=="D"){
+    ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$HomeTeam[j]),2]=ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$AwayTeam[j]),2]=ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2014$FTR[j]=="A"){
+    ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$AwayTeam[j]),2]=ranking_PremierLeague_2014[ranking_PremierLeague_2014$team==as.character(PremierLeague2014$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2014=arrange(ranking_PremierLeague_2014,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2014)), league="Premier League", year=2014)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2013=data_frame(team= as.factor(unique(PremierLeague2013$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2013)){ 
+  
+  if(PremierLeague2013$FTR[j]=="H"){
+    ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$HomeTeam[j]),2]=ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2013$FTR[j]=="D"){
+    ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$HomeTeam[j]),2]=ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$AwayTeam[j]),2]=ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2013$FTR[j]=="A"){
+    ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$AwayTeam[j]),2]=ranking_PremierLeague_2013[ranking_PremierLeague_2013$team==as.character(PremierLeague2013$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2013=arrange(ranking_PremierLeague_2013,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2013)), league="Premier League", year=2013)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2012=data_frame(team= as.factor(unique(PremierLeague2012$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2012)){ 
+  
+  if(PremierLeague2012$FTR[j]=="H"){
+    ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$HomeTeam[j]),2]=ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2012$FTR[j]=="D"){
+    ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$HomeTeam[j]),2]=ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$AwayTeam[j]),2]=ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2012$FTR[j]=="A"){
+    ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$AwayTeam[j]),2]=ranking_PremierLeague_2012[ranking_PremierLeague_2012$team==as.character(PremierLeague2012$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2012=arrange(ranking_PremierLeague_2012,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2012)), league="Premier League", year=2012)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2011=data_frame(team= as.factor(unique(PremierLeague2011$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2011)){ 
+  
+  if(PremierLeague2011$FTR[j]=="H"){
+    ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$HomeTeam[j]),2]=ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2011$FTR[j]=="D"){
+    ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$HomeTeam[j]),2]=ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$AwayTeam[j]),2]=ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2011$FTR[j]=="A"){
+    ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$AwayTeam[j]),2]=ranking_PremierLeague_2011[ranking_PremierLeague_2011$team==as.character(PremierLeague2011$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2011=arrange(ranking_PremierLeague_2011,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2011)), league="Premier League", year=2011)%>% rename(name=team)
+```
+
+```{r}
+#Premier League
+ranking_PremierLeague_2010=data_frame(team= as.factor(unique(PremierLeague2010$HomeTeam)),points= 0)
+
+for (j in 1:nrow(PremierLeague2010)){ 
+  
+  if(PremierLeague2010$FTR[j]=="H"){
+    ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$HomeTeam[j]),2]=ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$HomeTeam[j]),2]+3
+  } 
+  if(PremierLeague2010$FTR[j]=="D"){
+    ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$HomeTeam[j]),2]=ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$HomeTeam[j]),2]+1
+    ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$AwayTeam[j]),2]=ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$AwayTeam[j]),2]+1
+  }
+  if(PremierLeague2010$FTR[j]=="A"){
+    ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$AwayTeam[j]),2]=ranking_PremierLeague_2010[ranking_PremierLeague_2010$team==as.character(PremierLeague2010$AwayTeam[j]),2]+3
+  }
+}
+ranking_PremierLeague_2010=arrange(ranking_PremierLeague_2010,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_PremierLeague_2010)), league="Premier League", year=2010)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2019=data_frame(team= as.factor(unique(LigueEspagnol2019$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2019)){ 
+  
+  if(LigueEspagnol2019$FTR[j]=="H"){
+    ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$HomeTeam[j]),2]=ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2019$FTR[j]=="D"){
+    ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$HomeTeam[j]),2]=ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$AwayTeam[j]),2]=ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2019$FTR[j]=="A"){
+    ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$AwayTeam[j]),2]=ranking_LigueEspagnol_2019[ranking_LigueEspagnol_2019$team==as.character(LigueEspagnol2019$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2019=arrange(ranking_LigueEspagnol_2019,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2019)), league="LaLigua", year=2019)%>% rename(name=team)
+```
+
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2018=data_frame(team= as.factor(unique(LigueEspagnol2018$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2018)){ 
+  
+  if(LigueEspagnol2018$FTR[j]=="H"){
+    ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$HomeTeam[j]),2]=ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2018$FTR[j]=="D"){
+    ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$HomeTeam[j]),2]=ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$AwayTeam[j]),2]=ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2018$FTR[j]=="A"){
+    ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$AwayTeam[j]),2]=ranking_LigueEspagnol_2018[ranking_LigueEspagnol_2018$team==as.character(LigueEspagnol2018$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2018=arrange(ranking_LigueEspagnol_2018,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2018)), league="LaLigua", year=2018)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2017=data_frame(team= as.factor(unique(LigueEspagnol2017$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2017)){ 
+  
+  if(LigueEspagnol2017$FTR[j]=="H"){
+    ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$HomeTeam[j]),2]=ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2017$FTR[j]=="D"){
+    ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$HomeTeam[j]),2]=ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$AwayTeam[j]),2]=ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2017$FTR[j]=="A"){
+    ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$AwayTeam[j]),2]=ranking_LigueEspagnol_2017[ranking_LigueEspagnol_2017$team==as.character(LigueEspagnol2017$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2017=arrange(ranking_LigueEspagnol_2017,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2017)), league="LaLigua", year=2017)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2016=data_frame(team= as.factor(unique(LigueEspagnol2016$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2016)){ 
+  
+  if(LigueEspagnol2016$FTR[j]=="H"){
+    ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$HomeTeam[j]),2]=ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2016$FTR[j]=="D"){
+    ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$HomeTeam[j]),2]=ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$AwayTeam[j]),2]=ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2016$FTR[j]=="A"){
+    ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$AwayTeam[j]),2]=ranking_LigueEspagnol_2016[ranking_LigueEspagnol_2016$team==as.character(LigueEspagnol2016$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2016=arrange(ranking_LigueEspagnol_2016,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2016)), league="LaLigua", year=2016)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2015=data_frame(team= as.factor(unique(LigueEspagnol2015$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2015)){ 
+  
+  if(LigueEspagnol2015$FTR[j]=="H"){
+    ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$HomeTeam[j]),2]=ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2015$FTR[j]=="D"){
+    ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$HomeTeam[j]),2]=ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$AwayTeam[j]),2]=ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2015$FTR[j]=="A"){
+    ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$AwayTeam[j]),2]=ranking_LigueEspagnol_2015[ranking_LigueEspagnol_2015$team==as.character(LigueEspagnol2015$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2015=arrange(ranking_LigueEspagnol_2015,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2015)), league="LaLigua", year=2015)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2014=data_frame(team= as.factor(unique(LigueEspagnol2014$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2014)){ 
+  if(LigueEspagnol2014$FTR[j]=="H"){
+    ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$HomeTeam[j]),2]=ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2014$FTR[j]=="D"){
+    ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$HomeTeam[j]),2]=ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$AwayTeam[j]),2]=ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2014$FTR[j]=="A"){
+    ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$AwayTeam[j]),2]=ranking_LigueEspagnol_2014[ranking_LigueEspagnol_2014$team==as.character(LigueEspagnol2014$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2014=arrange(ranking_LigueEspagnol_2014,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2014)), league="LaLigua", year=2014)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2013=data_frame(team= as.factor(unique(LigueEspagnol2013$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2013)){ 
+  
+  if(LigueEspagnol2013$FTR[j]=="H"){         ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$HomeTeam[j]),2]=ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$HomeTeam[j]),2]+3
+  }  
+  if(LigueEspagnol2013$FTR[j]=="D"){
+    ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$HomeTeam[j]),2]=ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$AwayTeam[j]),2]=ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2013$FTR[j]=="A"){
+    ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$AwayTeam[j]),2]=ranking_LigueEspagnol_2013[ranking_LigueEspagnol_2013$team==as.character(LigueEspagnol2013$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2013=arrange(ranking_LigueEspagnol_2013,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2013)), league="LaLigua", year=2013)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2012=data_frame(team= as.factor(unique(LigueEspagnol2012$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2012)){ 
+  
+  if(LigueEspagnol2012$FTR[j]=="H"){
+    ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$HomeTeam[j]),2]=ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$HomeTeam[j]),2]+3 
+  } 
+  if(LigueEspagnol2012$FTR[j]=="D"){
+    ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$HomeTeam[j]),2]=ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$AwayTeam[j]),2]=ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2012$FTR[j]=="A"){
+    ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$AwayTeam[j]),2]=ranking_LigueEspagnol_2012[ranking_LigueEspagnol_2012$team==as.character(LigueEspagnol2012$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2012=arrange(ranking_LigueEspagnol_2012,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2012)), league="LaLigua", year=2012)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2011=data_frame(team= as.factor(unique(LigueEspagnol2011$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2011)){ 
+  
+  if(LigueEspagnol2011$FTR[j]=="H"){
+    ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$HomeTeam[j]),2]=ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$HomeTeam[j]),2]+3
+  }  
+  if(LigueEspagnol2011$FTR[j]=="D"){
+    ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$HomeTeam[j]),2]=ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$AwayTeam[j]),2]=ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2011$FTR[j]=="A"){
+    ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$AwayTeam[j]),2]=ranking_LigueEspagnol_2011[ranking_LigueEspagnol_2011$team==as.character(LigueEspagnol2011$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2011=arrange(ranking_LigueEspagnol_2011,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2011)), league="LaLigua", year=2011)%>% rename(name=team)
+```
+
+```{r}
+#Ligue Espagnol
+ranking_LigueEspagnol_2010=data_frame(team= as.factor(unique(LigueEspagnol2010$HomeTeam)),points= 0)
+
+for (j in 1:nrow(LigueEspagnol2010)){ 
+  
+  if(LigueEspagnol2010$FTR[j]=="H"){
+    ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$HomeTeam[j]),2]=ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$HomeTeam[j]),2]+3
+  } 
+  if(LigueEspagnol2010$FTR[j]=="D"){
+    ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$HomeTeam[j]),2]=ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$HomeTeam[j]),2]+1
+    ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$AwayTeam[j]),2]=ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$AwayTeam[j]),2]+1
+  }
+  if(LigueEspagnol2010$FTR[j]=="A"){
+    ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$AwayTeam[j]),2]=ranking_LigueEspagnol_2010[ranking_LigueEspagnol_2010$team==as.character(LigueEspagnol2010$AwayTeam[j]),2]+3
+  }
+}
+ranking_LigueEspagnol_2010=arrange(ranking_LigueEspagnol_2010,desc(points))%>% 
+  mutate(ranking=c(1:nrow(ranking_LigueEspagnol_2010)), league="LaLigua", year=2010)%>% rename(name=team)
+```
+
+```{r}
+#CHANGE NAME TO MATCH DATAS
+
+
+#Bundesliga
+salary_data$name[salary_data$name=="Bayern München"]= "Bayern Munich"
+salary_data$name[salary_data$name=="FC Schalke 04"]= "Schalke 04"
+salary_data$name[salary_data$name=="Werder Bremen"]= "Werder Bremen"
+salary_data$name[salary_data$name=="Bay. Leverkusen"]= "Leverkusen"
+salary_data$name[salary_data$name=="Bor. Dortmund"]= "Dortmund"
+salary_data$name[salary_data$name=="VfB Stuttgart"]= "Stuttgart"
+salary_data$name[salary_data$name=="Hamburger SV"]= "Hamburg"
+salary_data$name[salary_data$name=="VfL Wolfsburg"]= "Wolfsburg"
+salary_data$name[salary_data$name=="1.FSV Mainz 05"]= "Mainz"
+salary_data$name[salary_data$name=="E. Frankfurt"]= "Ein Frankfurt"
+salary_data$name[salary_data$name=="TSG Hoffenheim"]= "Hoffenheim"
+salary_data$name[salary_data$name=="Bor. M'gladbach"]= "M'gladbach"
+salary_data$name[salary_data$name=="1.FC Köln"]= "FC Koln"
+salary_data$name[salary_data$name=="SC Freiburg"]= "Freiburg"
+salary_data$name[salary_data$name=="Hannover 96"]= "Hannover"
+salary_data$name[salary_data$name=="1.FC Nürnberg"]= "Nurnberg"
+salary_data$name[salary_data$name=="VfL Bochum"]= "Bochum"
+salary_data$name[salary_data$name=="Hertha BSC"]= "Hertha"
+salary_data$name[salary_data$name=="1.FC K'lautern"]= "Kaiserslautern"
+salary_data$name[salary_data$name=="FC St. Pauli"]= "St Pauli"
+salary_data$name[salary_data$name=="FC Augsburg"]= "Augsburg"
+salary_data$name[salary_data$name=="Greuther Fürth"]= "Greuther Furth"
+salary_data$name[salary_data$name=="F. Düsseldorf"]= "Fortuna Dusseldorf"
+salary_data$name[salary_data$name=="E. Braunschweig"]= "Braunschweig"
+salary_data$name[salary_data$name=="SC Paderborn"]= "Paderborn"
+salary_data$name[salary_data$name=="FC Ingolstadt"]= "Ingolstadt"
+salary_data$name[salary_data$name=="SV Darmstadt 98"]= "Darmstadt"
+salary_data$name[salary_data$name=="RB Leipzig"]= "RB Leipzig"
+
+
+#Serie A
+salary_data$name[salary_data$name=="Inter"]= "Inter"
+salary_data$name[salary_data$name=="AC Mailand"]= "Milan"
+salary_data$name[salary_data$name=="Juventus Turin"]= "Juventus"
+salary_data$name[salary_data$name=="AS Rom"]= "Roma"
+salary_data$name[salary_data$name=="AC Florenz"]= "Fiorentina"
+salary_data$name[salary_data$name=="Lazio Rom"]= "Lazio"
+salary_data$name[salary_data$name=="SSC Neapel"]= "Napoli"
+salary_data$name[salary_data$name=="FC Genua"]= "Genoa"
+salary_data$name[salary_data$name=="Udinese"]= "Udinese"
+salary_data$name[salary_data$name=="Sampdoria"]= "Sampdoria"
+salary_data$name[salary_data$name=="US Palermo"]= "Palermo"
+salary_data$name[salary_data$name=="Parma"]= "Parma"
+salary_data$name[salary_data$name=="Atal. Bergamo"]= "Atalanta"
+salary_data$name[salary_data$name=="Bologna"]= "Bologna"
+salary_data$name[salary_data$name=="Catania Calcio"]= "Catania"
+salary_data$name[salary_data$name=="AS Livorno"]= "Livorno"
+salary_data$name[salary_data$name=="Udinese Calcio"]= "Udinese"
+salary_data$name[salary_data$name=="Cesena"]= "Cesena"
+salary_data$name[salary_data$name=="Brescia"]= "Brescia"
+salary_data$name[salary_data$name=="Lecce"]= "Lecce"
+salary_data$name[salary_data$name=="Siena"]= "Siena"
+salary_data$name[salary_data$name=="Cagliari Calcio"]= "Cagliari"
+salary_data$name[salary_data$name=="Bari"]= "Bari"
+salary_data$name[salary_data$name=="Chievo Verona"]= "Chievo"
+salary_data$name[salary_data$name=="Novara Calcio"]= "Novara"
+salary_data$name[salary_data$name=="FC Turin"]= "Torino"
+salary_data$name[salary_data$name=="Delfino Pescara"]= "Pescara"
+salary_data$name[salary_data$name=="US Sassuolo"]= "Sassuolo"
+salary_data$name[salary_data$name=="Hellas Verona"]= "Verona"
+salary_data$name[salary_data$name=="Inter Mailand"]= "Inter"
+salary_data$name[salary_data$name=="FC Empoli"]= "Empoli"
+salary_data$name[salary_data$name=="Carpi"]= "Carpi"
+salary_data$name[salary_data$name=="Frosinone Calc."]= "Frosinone"
+salary_data$name[salary_data$name=="FC Crotone"]= "Crotone"
+salary_data$name[salary_data$name=="Benevento"]= "Benevento"
+salary_data$name[salary_data$name=="SPAL"]= "Spal"
+salary_data$name[salary_data$name=="Parma Calcio"]= "Parma"
+
+#ligue1
+salary_data$name[salary_data$name == "AC Ajaccio"] <- "Ajaccio"
+salary_data$name[salary_data$name == "AC Arles"] <- "Arles"
+salary_data$name[salary_data$name == "AJ Auxerre"] <- "Auxerre"
+salary_data$name[salary_data$name == "AS Monaco"] <- "Monaco"
+salary_data$name[salary_data$name == "AS Nancy"] <- "Nancy"
+salary_data$name[salary_data$name == "AS St.-Étienne"] <- "St Etienne"
+salary_data$name[salary_data$name == "EA Guingamp"] <- "Guingamp"
+salary_data$name[salary_data$name == "ES Troyes AC"] <- "Troyes"
+salary_data$name[salary_data$name == "FC Évian"] <- "Evian Thonon Gaillard"
+salary_data$name[salary_data$name == "FC Lorient"] <- "Lorient"
+salary_data$name[salary_data$name == "FC Metz"] <- "Metz"
+salary_data$name[salary_data$name == "FC Nantes"] <- "Nantes"
+salary_data$name[salary_data$name == "FC Sochaux"] <- "Sochaux"
+salary_data$name[salary_data$name == "FC Toulouse"] <- "Toulouse"
+salary_data$name[salary_data$name == "FC Valenciennes"] <- "Valenciennes"
+salary_data$name[salary_data$name == "FCO Dijon"] <- "Dijon"
+salary_data$name[salary_data$name == "G. Bordeaux"] <- "Bordeaux"
+salary_data$name[salary_data$name == "GFC Ajaccio"] <- "Ajaccio GFCO"
+salary_data$name[salary_data$name == "Grenoble"] <- "Grenoble"
+salary_data$name[salary_data$name == "Le Mans"] <- "Le Mans"
+salary_data$name[salary_data$name == "HSC Montpellier"] <- "Montpellier"
+salary_data$name[salary_data$name == "LOSC Lille"] <- "Lille"
+salary_data$name[salary_data$name == "Nîmes Olympique"] <- "Nimes"
+salary_data$name[salary_data$name == "OGC Nizza"] <- "Nice"
+salary_data$name[salary_data$name == "Ol. Marseille"] <- "Marseille"
+salary_data$name[salary_data$name == "Olympique Lyon"] <- "Lyon"
+salary_data$name[salary_data$name == "Paris SG"] <- "Paris SG"
+salary_data$name[salary_data$name == "R. Straßburg"] <- "Strasbourg"
+salary_data$name[salary_data$name == "RC Lens"] <- "Lens"
+salary_data$name[salary_data$name == "SC Amiens"] <- "Amiens"
+salary_data$name[salary_data$name == "SC Bastia"] <- "Bastia"
+salary_data$name[salary_data$name == "SCO Angers"] <- "Angers"
+salary_data$name[salary_data$name == "SM Caen"] <- "Caen"
+salary_data$name[salary_data$name == "Stade Brest"] <- "Brest"
+salary_data$name[salary_data$name == "Stade Reims"] <- "Reims"
+salary_data$name[salary_data$name == "Stade Rennes"] <- "Rennes"
+salary_data$name[salary_data$name == "US Boulogne"] <- "Boulogne"
+salary_data$name[salary_data$name == "Grenoble"] <- "Grenoble"
+salary_data$name[salary_data$name == "Le Mans UC 72"] <- "Le Mans"
+salary_data$name[salary_data$name == "Stade Brest 29"] <- "Brest"
+
+#PremierLegue
+salary_data$name[salary_data$name == "AFC Sunderland"] <- "Sunderland"
+salary_data$name[salary_data$name == "Aston Villa"] <- "Aston Villa"
+salary_data$name[salary_data$name == "Birmingham City"] <- "Birmingham"
+salary_data$name[salary_data$name == "Blackburn Rov."] <- "Blackburn"
+salary_data$name[salary_data$name == "Bolton Wand."] <- "Bolton"
+salary_data$name[salary_data$name == "Bournemouth"] <- "Bournemouth"
+salary_data$name[salary_data$name == "Brighton & Hove"] <- "Brighton"
+salary_data$name[salary_data$name == "Cardiff City"] <- "Cardiff"
+salary_data$name[salary_data$name == "Crystal Palace"] <- "Crystal Palace"
+salary_data$name[salary_data$name == "FC Arsenal"] <- "Arsenal"
+salary_data$name[salary_data$name == "FC Blackpool"] <- "Blackpool"
+salary_data$name[salary_data$name == "FC Burnley"] <- "Burnley"
+salary_data$name[salary_data$name == "FC Chelsea"] <- "Chelsea"
+salary_data$name[salary_data$name == "FC Everton"] <- "Everton"
+salary_data$name[salary_data$name == "FC Fulham"] <- "Fulham"
+salary_data$name[salary_data$name == "FC Liverpool"] <- "Liverpool"
+salary_data$name[salary_data$name == "FC Portsmouth"] <- "Portsmouth"
+salary_data$name[salary_data$name == "FC Reading"] <- "Reading"
+salary_data$name[salary_data$name == "FC Southampton"] <- "Southampton"
+salary_data$name[salary_data$name == "FC Watford"] <- "Watford"
+salary_data$name[salary_data$name == "Huddersfield"] <- "Huddersfield"
+salary_data$name[salary_data$name == "Hull City"] <- "Hull"
+salary_data$name[salary_data$name == "Leicester City"] <- "Leicester"
+salary_data$name[salary_data$name == "Manchester City"] <- "Man City"
+salary_data$name[salary_data$name == "Manchester Utd."] <- "Man United"
+salary_data$name[salary_data$name == "Middlesbrough"] <- "Middlesbrough"
+salary_data$name[salary_data$name == "Newcastle Utd."] <- "Newcastle"
+salary_data$name[salary_data$name == "Norwich City"] <- "Norwich"
+salary_data$name[salary_data$name == "QPR"] <- "QPR"
+salary_data$name[salary_data$name == "Stoke City"] <- "Stoke"
+salary_data$name[salary_data$name == "Swansea City"] <- "Swansea"
+salary_data$name[salary_data$name == "Tottenham"] <- "Tottenham"
+salary_data$name[salary_data$name == "West Brom"] <- "West Brom"
+salary_data$name[salary_data$name == "West Ham Utd."] <- "West Ham"
+salary_data$name[salary_data$name == "Wigan Athletic"] <- "Wigan"
+salary_data$name[salary_data$name == "Wolverhampton"] <- "Wolves"
+
+#LigueA 
+salary_data$name[salary_data$name == "Athletic Bilbao"] <- "Ath Bilbao"
+salary_data$name[salary_data$name == "Atlético Madrid"] <- "Ath Madrid"
+salary_data$name[salary_data$name == "Betis Sevilla"] <- "Betis"
+salary_data$name[salary_data$name == "CA Osasuna"] <- "Osasuna"
+salary_data$name[salary_data$name == "CD Leganés"] <- "Leganes"
+salary_data$name[salary_data$name == "CD Teneriffa"] <- "Tenerife"
+salary_data$name[salary_data$name == "Celta Vigo"] <- "Celta"
+salary_data$name[salary_data$name == "Dep. Alavés"] <- "Alaves"
+salary_data$name[salary_data$name == "Dep. La Coruna"] <- "La Coruna"
+salary_data$name[salary_data$name == "Deportivo Xerez"] <- "Xerez"
+salary_data$name[salary_data$name == "Esp. Barcelona"] <- "Espanol"
+salary_data$name[salary_data$name == "FC Barcelona"] <- "Barcelona"
+salary_data$name[salary_data$name == "FC Córdoba"] <- "Cordoba"
+salary_data$name[salary_data$name == "FC Elche"] <- "Elche"
+salary_data$name[salary_data$name == "FC Getafe"] <- "Getafe"
+salary_data$name[salary_data$name == "FC Girona"] <- "Girona"
+salary_data$name[salary_data$name == "FC Granada"] <- "Granada"
+salary_data$name[salary_data$name == "FC Málaga"] <- "Malaga"
+salary_data$name[salary_data$name == "FC Sevilla"] <- "Sevilla"
+salary_data$name[salary_data$name == "FC Valencia"] <- "Valencia"
+salary_data$name[salary_data$name == "FC Villarreal"] <- "Villarreal"
+salary_data$name[salary_data$name == "Hércules"] <- "Hercules"
+salary_data$name[salary_data$name == "Rac. Santander"] <- "Santander"
+salary_data$name[salary_data$name == "Rayo Vallecano"] <- "Vallecano"
+salary_data$name[salary_data$name == "RCD Mallorca"] <- "Mallorca"
+salary_data$name[salary_data$name == "Real Madrid"] <- "Real Madrid"
+salary_data$name[salary_data$name == "Real Saragossa"] <- "Zaragoza"
+salary_data$name[salary_data$name == "Real Sociedad"] <- "Sociedad"
+salary_data$name[salary_data$name == "Real Valladolid"] <- "Valladolid"
+salary_data$name[salary_data$name == "SD Eibar"] <- "Eibar"
+salary_data$name[salary_data$name == "SD Huesca"] <- "Huesca"
+salary_data$name[salary_data$name == "Sporting Gijón"] <- "Sp Gijon"
+salary_data$name[salary_data$name == "UD Almería"] <- "Almeria"
+salary_data$name[salary_data$name == "UD Las Palmas"] <- "Las Palmas"
+salary_data$name[salary_data$name == "UD Levante"] <- "Levante"
+```
+
+
+```{r}
+
+#tableau salary par Pays
+
+#changer date pour que ca coordonne avec les saisons 
+
+salary_data = salary_data %>% mutate(year = year+1)
+
+salary_data= salary_data %>% filter(!(year== "2020")) %>% filter(league!="Premier Liga") 
+
+
+
+
+TOTAL = rbind(
+  ranking_PremierLeague_2010,
+  ranking_PremierLeague_2011,
+  ranking_PremierLeague_2012,
+  ranking_PremierLeague_2013,
+  ranking_PremierLeague_2014,
+  ranking_PremierLeague_2015,
+  ranking_PremierLeague_2016,
+  ranking_PremierLeague_2017,
+  ranking_PremierLeague_2018,
+  ranking_PremierLeague_2019,
+  ranking_SerieA_2019,
+  ranking_SerieA_2018,
+  ranking_SerieA_2017,
+  ranking_SerieA_2016,
+  ranking_SerieA_2015,
+  ranking_SerieA_2014,
+  ranking_SerieA_2013,
+  ranking_SerieA_2012,
+  ranking_SerieA_2011,
+  ranking_SerieA_2010,
+  ranking_LigueEspagnol_2019,
+  ranking_LigueEspagnol_2018,
+  ranking_LigueEspagnol_2017,
+  ranking_LigueEspagnol_2016,
+  ranking_LigueEspagnol_2015,
+  ranking_LigueEspagnol_2014,
+  ranking_LigueEspagnol_2013,
+  ranking_LigueEspagnol_2012,
+  ranking_LigueEspagnol_2011,
+  ranking_LigueEspagnol_2010,
+  ranking_Ligue1_2010,
+  ranking_Ligue1_2011,
+  ranking_Ligue1_2012,
+  ranking_Ligue1_2013,
+  ranking_Ligue1_2014,
+  ranking_Ligue1_2015,
+  ranking_Ligue1_2016,
+  ranking_Ligue1_2017,
+  ranking_Ligue1_2018,
+  ranking_Ligue1_2019,
+  ranking_Bundesligua_2019,
+  ranking_Bundesligua_2018,
+  ranking_Bundesligua_2017,
+  ranking_Bundesligua_2016,
+  ranking_Bundesligua_2015,
+  ranking_Bundesligua_2014,
+  ranking_Bundesligua_2013,
+  ranking_Bundesligua_2012,
+  ranking_Bundesligua_2011,
+  ranking_Bundesligua_2010
+)
+
+mw_table=left_join(salary_data, TOTAL, by=c("name","year")) 
+
+mw_table= mw_table %>%mutate(logmw=log(mw))%>% select(-"league.y")%>% rename(league=league.x)
+
+mw_table%>% write.csv(file = here("Data/mw_table.csv"))
+
+```
+

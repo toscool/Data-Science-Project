@@ -1,0 +1,288 @@
+
+# Modeling
+
+In this section we will try to understand the impact of the market value on the final ranking by first, building a model and have a look at all the parameters.
+Then we will assess the goodness of fit and see if we can predict some good results.
+ 
+Let's start by plotting a scatterplot of the number of points regarding the market values:
+
+```{r graph-point,fig.cap="Distribution", warning=FALSE, message=FALSE}
+
+mw_table %>% 
+  ggplot(aes(x = mw, y = points, color = ranking)) + scale_color_viridis_c(option = "C") +
+  geom_point() +
+  labs(title = "Influence of the market value in the final ranking") +
+  theme(
+    plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  )
+
+```
+
+We can see in \@ref(fig:graph-point) graph that the number of points increase exponentially with the market value. In order to have better results we will apply the logarithm function \@ref(fig:graph-pointlog) on the market value to have linear distribution and then use a linear model.
+
+```{r graph-pointlog,fig.cap="Log Distribution", warning=FALSE, message=FALSE}
+
+mw_table %>%
+  ggplot(aes(x = logmw, y = points, color = ranking)) +
+  scale_color_viridis_c(option = "C") +
+  geom_point() +
+  labs(title = "Influence of the log market value in the final ranking") +
+  theme(
+    plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  )
+
+
+```
+
+
+## Model
+
+Our model is based on the following formula
+  * `points ~ log(mw) + name + year`.
+Furthermore we will use the `linear least square method` to fit all the parameters.
+
+
+```{r, warning=FALSE, message=FALSE}
+
+#Create table for Premier league
+mw_table_PremierLeague= mw_table %>% filter(league=="Premier League")
+
+#Create table for Premier league
+mw_table_Bundesligua= mw_table %>% filter(league=="1. Bundesliga")
+
+#Create table for Premier league
+mw_table_SerieA= mw_table %>% filter(league=="Serie A")
+
+#Create table for Premier league
+mw_table_Ligue1= mw_table %>% filter(league=="Ligue 1")
+
+#Create table for Premier league
+mw_table_Liga= mw_table %>% filter(league=="LaLiga")
+
+```
+
+```{r, warning=FALSE, message=FALSE}
+
+
+model_all=lm(points~logmw+year+name, data = mw_table)
+  model_2=lm(ranking~logmw+name+year+name, data = mw_table)
+
+```
+
+
+```{r model-parameters, warning=FALSE, message=FALSE}
+model_all %>%
+  tidy() %>%
+  select(-statistic) %>%
+  mutate(signif = stars.pval(p.value)) %>%
+  kable(
+    caption = "Summary of the model for Premier League",
+    digits = 3,
+    col.names = c(
+      "Parameter",
+      "Estimate",
+      "Standard Error",
+      "P-value",
+      "Significance"
+    )
+  ) %>%
+  kable_styling(bootstrap_options = "striped")
+
+```
+\@ref(tab:model-parameters) is the list of the parameters and their estimates. We can see that the logmw increase the number of point and it's a very good point for our assumption. The intercept is very high but it balanced the year coefficent which is -0.464 (*2010 for instance). Furthermore we can see that only biggest teams have a significant estimate as Man City, Real Madrid, Barcelona etc.. with very high value, around 30. There is of course an impact of the team on the ranking. All others teams have a value which are not very significant, it could be the case because their market values are quite all the same under the 10th rank and their number of points are then more difficult to differentiate and predict.
+
+
+Here \@ref(tab:summary-table) we have compared the Rsquared adjusted of two models:
+
+  - `points ~ log(mw) + name + year`.
+  - `ranking ~ log(mw) + name + year`.
+
+```{r summary-table, warning=FALSE, message=FALSE}
+model_all %>%
+  glance() %>% 
+  kable(caption = "Summary of the model with points",
+        digits = 3)%>%
+  kable_styling(bootstrap_options = "striped")
+```
+
+```{r, warning=FALSE, message=FALSE}
+model_2 %>%
+  glance() %>%
+  kable(
+    caption = "Summary of the model with rank",
+    digits = 3) %>%
+  kable_styling(bootstrap_options = "striped")
+```
+
+We can see that the Rsquared adjusted is around 68% in the point model against 59% in the ranking model, that is why we have prefered to take the number rather than the ranking.
+
+68% is quite good results for our small number of explained variables.
+
+## Goodness of fit 
+
+To Discuss the goodness of the fit we will plot the residuals and have a look at some predictions made by our model.
+
+
+```{r residuals-fig, fig.cap="Residuals vs Log Market value", fig.asp=0.8, warning=FALSE, message=FALSE}
+
+model_all %>%
+  augment() %>%
+  ggplot(aes(logmw, .resid)) +
+  geom_point() +
+  labs(title = "Residuals distribution",
+       x = "Log Market value",
+       y = "Residuals") +
+  theme(
+         plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+         plot.subtitle = element_text(size = 12, face = "italic"),
+         axis.title.x = element_text(size = 10),
+         axis.title.y = element_text(size = 10)
+       )
+```
+
+```{r residuals-fig2, fig.cap="Residuals vs fitted values", fig.asp=0.8, warning=FALSE, message=FALSE}
+
+
+model_all %>%
+  augment() %>%
+  ggplot(aes(.fitted, .resid)) +
+  geom_point() +
+  labs(title = "Residuals distribution",
+       x = "Fitted values",
+       y = "Residuals") + 
+  theme(
+         plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+         plot.subtitle = element_text(size = 12, face = "italic"),
+         axis.title.x = element_text(size = 10),
+         axis.title.y = element_text(size = 10)
+       )
+
+```
+The residuals graphs \@ref(fig:residuals-fig) and \@ref(fig:residuals-fig2) are well randomly spread with a mean of zero for the log market value and for the fitted graph. It is a good point for our model since their is no clear pattern in the residuals.
+
+```{r, warning=FALSE, message=FALSE}
+
+
+mw_table = mw_table %>%
+  add_predictions(model_all, "prediction") %>% 
+  mutate(pred_rank = 0)
+
+league_name = c("Premier League", "LaLiga", "Serie A", "1. Bundesliga", "Ligue 1")
+
+for (j in 2010:2019) {
+  for (k in 1:5) {
+    mw_table[mw_table$year == j & mw_table$league == league_name[k], ] = mw_table %>%
+      filter(year == j, league == league_name[k]) %>%
+      arrange(year, desc(prediction)) %>%
+      mutate(pred_rank = c(1:nrow(mw_table[mw_table$year == j & mw_table$league == league_name[k], ])))
+  }
+}
+```
+
+```{r  pred-figure, fig.asp=1.2, fig.width=8, fig.cap=" Prediction graphs", warning=FALSE, message=FALSE}
+p1 = mw_table %>% filter(year == 2014) %>% filter(league == "Premier League") %>%
+  ggplot() +
+  geom_point(aes(x = logmw, y = ranking, color = "Observed")) +
+  geom_point(aes(x = logmw, y = pred_rank, color = "Prediction"),
+             size = 1) +
+  scale_y_continuous(breaks = seq(1, 20, by = 2)) +
+  scale_x_continuous(breaks = c(1:2)) +
+  theme(
+    legend.position = c(0.80, 0.80),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  ) +
+  labs(subtitle = "Year 2014 in Premier League") + scale_color_manual(values =
+                                                                        c("red", "blue")) +
+  geom_segment(aes(
+    x = logmw,
+    xend = logmw,
+    y = ranking,
+    yend = pred_rank
+  ))
+
+p4 = mw_table %>% filter(year == 2010) %>% filter(league == "LaLiga") %>%
+  ggplot() +
+  geom_point(aes(x = logmw, y = ranking, color = "Observed")) +
+  geom_point(aes(x = logmw, y = pred_rank, color = "Prediction"),
+             size = 1) +
+  scale_y_continuous(breaks = seq(1, 20, by = 2)) +
+  scale_x_continuous(breaks = c(1:2)) +
+  theme(
+    legend.position = c(0.80, 0.80),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  ) +
+  labs(subtitle = "Year 2014 in Liga") + scale_color_manual(values = c("red", "blue")) +
+  geom_segment(aes(
+    x = logmw,
+    xend = logmw,
+    y = ranking,
+    yend = pred_rank
+  ))
+
+p2 = mw_table %>% filter(year == 2017) %>% filter(league == "Serie A") %>%
+  ggplot() +
+  geom_point(aes(x = logmw, y = ranking, color = "Observed")) +
+  geom_point(aes(x = logmw, y = pred_rank, color = "Prediction"),
+             size = 1) +
+  scale_x_continuous(breaks = c(1:2)) +
+  scale_y_continuous(breaks = seq(1, 20, by = 2)) +
+  theme(
+    legend.position = c(0.80, 0.80),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  ) +
+  labs(subtitle = "Year 2017 in Serie A") + scale_color_manual(values =
+                                                                 c("red", "blue")) +
+  geom_segment(aes(
+    x = logmw,
+    xend = logmw,
+    y = ranking,
+    yend = pred_rank
+  ))
+
+p3 = mw_table %>% filter(year == 2013) %>% filter(league == "Ligue 1") %>%
+  ggplot() +
+  geom_point(aes(x = logmw, y = ranking, color = "Observed")) +
+  geom_point(aes(x = logmw, y = pred_rank, color = "Prediction"),
+             size = 1) +
+  scale_y_continuous(breaks = seq(1, 20, by = 2)) +
+  scale_x_continuous(breaks = c(1:2)) +
+  theme(
+    legend.position = c(0.80, 0.80),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  ) +
+  labs(subtitle = "Year 2012 in Premier League") +
+  scale_color_manual(values =c("red", "blue")) +
+  geom_segment(aes(
+    x = logmw,
+    xend = logmw,
+    y = ranking,
+    yend = pred_rank
+  ))
+
+
+(p1 + p2 + p3 + p4) +
+  plot_annotation(title = "Prediction ranking vs Observed ranking")
+
+```
+
+In the last graph of our project we have built a function that takes into account the fitted number of points reach by each team and used it to build a ranking.
+We have then built this graph \@ref(fig:pred-figure) to have a view on our prediction against the observed ranking. We have selected some years and championships to illustrate this. As we can see it predict quite well the ranking with obviously some mistakes but they are quite small in terms of ranking. In fact we have seen in the residuals graphs  \@ref(fig:residuals-fig) that our errors are in majority under 10 points, it seems high,but in terms of ranking 10 points represent approximately 4 places depending on the season. As you can see, our errors in terms of ranking are quite small and we predict well from the 1st rank to the 10th, but after the 10th rank it is more difficult as there is not a lot of differentiation in term of market values 
+
+Our Model describes well the big influence of the market value in football. However, our model has some boundaries in our assumption. Indeed, it does not just take into account the market value but also the team… As you can imagine the estimate for Barcelona is not the same as the one for Toulouse. For instance, if tomorrow Barcelona become a low-ranking team with small market value for whatever reason, our model will still fit a high number of points because of the “background” of the club the previous years.
+
+
+

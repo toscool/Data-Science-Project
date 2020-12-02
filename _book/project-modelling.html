@@ -1,0 +1,3103 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 PROJECT: Modelling | Project Group 9 : the big title</title>
+  <meta name="description" content="3 PROJECT: Modelling | Project Group 9 : the big title" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 PROJECT: Modelling | Project Group 9 : the big title" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 PROJECT: Modelling | Project Group 9 : the big title" />
+  
+  
+  
+
+<meta name="author" content="BAEUMLIN Thomas, RENGER Hadrien" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="project-eda.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="project-eda.html"><a href="project-eda.html"><i class="fa fa-check"></i><b>2</b> PROJECT: EDA</a><ul>
+<li class="chapter" data-level="2.1" data-path="project-eda.html"><a href="project-eda.html#description-of-the-data"><i class="fa fa-check"></i><b>2.1</b> Description of the data</a></li>
+<li class="chapter" data-level="2.2" data-path="project-eda.html"><a href="project-eda.html#the-evolution-of-player-market-value"><i class="fa fa-check"></i><b>2.2</b> The evolution of player market value</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="project-modelling.html"><a href="project-modelling.html"><i class="fa fa-check"></i><b>3</b> PROJECT: Modelling</a><ul>
+<li class="chapter" data-level="3.1" data-path="project-modelling.html"><a href="project-modelling.html#st-section"><i class="fa fa-check"></i><b>3.1</b> 1st Section</a></li>
+<li class="chapter" data-level="3.2" data-path="project-modelling.html"><a href="project-modelling.html#goodness-of-fit"><i class="fa fa-check"></i><b>3.2</b> Goodness of fit</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Project Group 9 : the big title</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="project-modelling" class="section level1">
+<h1><span class="header-section-number">3</span> PROJECT: Modelling</h1>
+<p>In This section we will try to understand the impact of the market value on the final ranking.</p>
+<p>In the First part we will build the model and have a look to the parameters. In the second part we will assess the goodness of fit and see if we can predict what could happen next year</p>
+<div id="st-section" class="section level2">
+<h2><span class="header-section-number">3.1</span> 1st Section</h2>
+<p>Our model based on the following formula
+* <code>points ~ log(mw) + name + year</code>.
+Furthermore we will use the <code>linear least square method</code> to fit all the parameters.</p>
+<p>Our model will then predict the number of points and not directly the ranking. we have thought that it is more precise and robust than direclty predict the ranking. For instance points goes from 1 to 100 and ranking from 1 to 20. However we have used the predict number of points to build a ranking and compare it with the official one.</p>
+click here: <a href="project-modelling.html#tab:summary-table">3.2</a> to skip the table:
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:model-parameters">Table 3.1: </span>Summary of the model for Premier League
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Standard Error
+</th>
+<th style="text-align:right;">
+P-value
+</th>
+<th style="text-align:left;">
+Significance
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+969.976
+</td>
+<td style="text-align:right;">
+258.553
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+logmw
+</td>
+<td style="text-align:right;">
+5.791
+</td>
+<td style="text-align:right;">
+1.111
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAjaccio GFCO
+</td>
+<td style="text-align:right;">
+7.285
+</td>
+<td style="text-align:right;">
+10.805
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAlaves
+</td>
+<td style="text-align:right;">
+14.253
+</td>
+<td style="text-align:right;">
+7.638
+</td>
+<td style="text-align:right;">
+0.062
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAlmeria
+</td>
+<td style="text-align:right;">
+-2.145
+</td>
+<td style="text-align:right;">
+7.134
+</td>
+<td style="text-align:right;">
+0.764
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAmiens
+</td>
+<td style="text-align:right;">
+7.899
+</td>
+<td style="text-align:right;">
+8.529
+</td>
+<td style="text-align:right;">
+0.355
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAngers
+</td>
+<td style="text-align:right;">
+12.050
+</td>
+<td style="text-align:right;">
+7.136
+</td>
+<td style="text-align:right;">
+0.092
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameArles
+</td>
+<td style="text-align:right;">
+-14.921
+</td>
+<td style="text-align:right;">
+10.760
+</td>
+<td style="text-align:right;">
+0.166
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameArsenal
+</td>
+<td style="text-align:right;">
+23.908
+</td>
+<td style="text-align:right;">
+6.619
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAston Villa
+</td>
+<td style="text-align:right;">
+-2.775
+</td>
+<td style="text-align:right;">
+6.609
+</td>
+<td style="text-align:right;">
+0.675
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAtalanta
+</td>
+<td style="text-align:right;">
+12.863
+</td>
+<td style="text-align:right;">
+6.250
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAth Bilbao
+</td>
+<td style="text-align:right;">
+12.240
+</td>
+<td style="text-align:right;">
+6.320
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAth Madrid
+</td>
+<td style="text-align:right;">
+24.984
+</td>
+<td style="text-align:right;">
+6.592
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAugsburg
+</td>
+<td style="text-align:right;">
+3.216
+</td>
+<td style="text-align:right;">
+6.325
+</td>
+<td style="text-align:right;">
+0.611
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameAuxerre
+</td>
+<td style="text-align:right;">
+12.856
+</td>
+<td style="text-align:right;">
+7.628
+</td>
+<td style="text-align:right;">
+0.092
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBarcelona
+</td>
+<td style="text-align:right;">
+40.668
+</td>
+<td style="text-align:right;">
+6.956
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBari
+</td>
+<td style="text-align:right;">
+-0.648
+</td>
+<td style="text-align:right;">
+8.516
+</td>
+<td style="text-align:right;">
+0.939
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBastia
+</td>
+<td style="text-align:right;">
+10.746
+</td>
+<td style="text-align:right;">
+6.809
+</td>
+<td style="text-align:right;">
+0.115
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBayern Munich
+</td>
+<td style="text-align:right;">
+29.351
+</td>
+<td style="text-align:right;">
+6.827
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBenevento
+</td>
+<td style="text-align:right;">
+-13.720
+</td>
+<td style="text-align:right;">
+10.772
+</td>
+<td style="text-align:right;">
+0.203
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBetis
+</td>
+<td style="text-align:right;">
+6.949
+</td>
+<td style="text-align:right;">
+6.486
+</td>
+<td style="text-align:right;">
+0.284
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBirmingham
+</td>
+<td style="text-align:right;">
+2.926
+</td>
+<td style="text-align:right;">
+8.580
+</td>
+<td style="text-align:right;">
+0.733
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBlackburn
+</td>
+<td style="text-align:right;">
+-0.597
+</td>
+<td style="text-align:right;">
+7.702
+</td>
+<td style="text-align:right;">
+0.938
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBlackpool
+</td>
+<td style="text-align:right;">
+3.206
+</td>
+<td style="text-align:right;">
+10.759
+</td>
+<td style="text-align:right;">
+0.766
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBochum
+</td>
+<td style="text-align:right;">
+-10.866
+</td>
+<td style="text-align:right;">
+10.777
+</td>
+<td style="text-align:right;">
+0.314
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBologna
+</td>
+<td style="text-align:right;">
+4.107
+</td>
+<td style="text-align:right;">
+6.234
+</td>
+<td style="text-align:right;">
+0.510
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBolton
+</td>
+<td style="text-align:right;">
+-1.891
+</td>
+<td style="text-align:right;">
+7.711
+</td>
+<td style="text-align:right;">
+0.806
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBordeaux
+</td>
+<td style="text-align:right;">
+14.891
+</td>
+<td style="text-align:right;">
+6.217
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBoulogne
+</td>
+<td style="text-align:right;">
+-5.219
+</td>
+<td style="text-align:right;">
+10.762
+</td>
+<td style="text-align:right;">
+0.628
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBournemouth
+</td>
+<td style="text-align:right;">
+4.989
+</td>
+<td style="text-align:right;">
+7.193
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBraunschweig
+</td>
+<td style="text-align:right;">
+-9.651
+</td>
+<td style="text-align:right;">
+10.757
+</td>
+<td style="text-align:right;">
+0.370
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBrescia
+</td>
+<td style="text-align:right;">
+-5.254
+</td>
+<td style="text-align:right;">
+10.763
+</td>
+<td style="text-align:right;">
+0.626
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBrest
+</td>
+<td style="text-align:right;">
+2.530
+</td>
+<td style="text-align:right;">
+7.607
+</td>
+<td style="text-align:right;">
+0.740
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBrighton
+</td>
+<td style="text-align:right;">
+-2.094
+</td>
+<td style="text-align:right;">
+8.601
+</td>
+<td style="text-align:right;">
+0.808
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameBurnley
+</td>
+<td style="text-align:right;">
+0.403
+</td>
+<td style="text-align:right;">
+6.858
+</td>
+<td style="text-align:right;">
+0.953
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCaen
+</td>
+<td style="text-align:right;">
+7.429
+</td>
+<td style="text-align:right;">
+6.435
+</td>
+<td style="text-align:right;">
+0.249
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCagliari
+</td>
+<td style="text-align:right;">
+3.615
+</td>
+<td style="text-align:right;">
+6.247
+</td>
+<td style="text-align:right;">
+0.563
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCardiff
+</td>
+<td style="text-align:right;">
+-6.684
+</td>
+<td style="text-align:right;">
+8.548
+</td>
+<td style="text-align:right;">
+0.435
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCarpi
+</td>
+<td style="text-align:right;">
+1.104
+</td>
+<td style="text-align:right;">
+10.770
+</td>
+<td style="text-align:right;">
+0.918
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCatania
+</td>
+<td style="text-align:right;">
+6.666
+</td>
+<td style="text-align:right;">
+6.832
+</td>
+<td style="text-align:right;">
+0.329
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCelta
+</td>
+<td style="text-align:right;">
+8.230
+</td>
+<td style="text-align:right;">
+6.494
+</td>
+<td style="text-align:right;">
+0.205
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCesena
+</td>
+<td style="text-align:right;">
+-7.319
+</td>
+<td style="text-align:right;">
+7.612
+</td>
+<td style="text-align:right;">
+0.337
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameChelsea
+</td>
+<td style="text-align:right;">
+24.813
+</td>
+<td style="text-align:right;">
+6.788
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameChievo
+</td>
+<td style="text-align:right;">
+5.752
+</td>
+<td style="text-align:right;">
+6.136
+</td>
+<td style="text-align:right;">
+0.349
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCordoba
+</td>
+<td style="text-align:right;">
+-15.884
+</td>
+<td style="text-align:right;">
+10.760
+</td>
+<td style="text-align:right;">
+0.140
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCrotone
+</td>
+<td style="text-align:right;">
+2.395
+</td>
+<td style="text-align:right;">
+8.532
+</td>
+<td style="text-align:right;">
+0.779
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameCrystal Palace
+</td>
+<td style="text-align:right;">
+3.678
+</td>
+<td style="text-align:right;">
+6.716
+</td>
+<td style="text-align:right;">
+0.584
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameDarmstadt
+</td>
+<td style="text-align:right;">
+-0.741
+</td>
+<td style="text-align:right;">
+8.526
+</td>
+<td style="text-align:right;">
+0.931
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameDijon
+</td>
+<td style="text-align:right;">
+5.093
+</td>
+<td style="text-align:right;">
+7.129
+</td>
+<td style="text-align:right;">
+0.475
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameDortmund
+</td>
+<td style="text-align:right;">
+20.444
+</td>
+<td style="text-align:right;">
+6.514
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEibar
+</td>
+<td style="text-align:right;">
+10.311
+</td>
+<td style="text-align:right;">
+6.822
+</td>
+<td style="text-align:right;">
+0.131
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEin Frankfurt
+</td>
+<td style="text-align:right;">
+4.221
+</td>
+<td style="text-align:right;">
+6.266
+</td>
+<td style="text-align:right;">
+0.501
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameElche
+</td>
+<td style="text-align:right;">
+4.194
+</td>
+<td style="text-align:right;">
+8.509
+</td>
+<td style="text-align:right;">
+0.622
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEmpoli
+</td>
+<td style="text-align:right;">
+5.391
+</td>
+<td style="text-align:right;">
+7.129
+</td>
+<td style="text-align:right;">
+0.450
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEspanol
+</td>
+<td style="text-align:right;">
+8.172
+</td>
+<td style="text-align:right;">
+6.189
+</td>
+<td style="text-align:right;">
+0.187
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEverton
+</td>
+<td style="text-align:right;">
+11.027
+</td>
+<td style="text-align:right;">
+6.447
+</td>
+<td style="text-align:right;">
+0.088
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameEvian Thonon Gaillard
+</td>
+<td style="text-align:right;">
+6.722
+</td>
+<td style="text-align:right;">
+7.116
+</td>
+<td style="text-align:right;">
+0.345
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFC Koln
+</td>
+<td style="text-align:right;">
+-1.497
+</td>
+<td style="text-align:right;">
+6.484
+</td>
+<td style="text-align:right;">
+0.817
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFiorentina
+</td>
+<td style="text-align:right;">
+13.016
+</td>
+<td style="text-align:right;">
+6.345
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFortuna Dusseldorf
+</td>
+<td style="text-align:right;">
+2.070
+</td>
+<td style="text-align:right;">
+8.511
+</td>
+<td style="text-align:right;">
+0.808
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFreiburg
+</td>
+<td style="text-align:right;">
+2.260
+</td>
+<td style="text-align:right;">
+6.233
+</td>
+<td style="text-align:right;">
+0.717
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFrosinone
+</td>
+<td style="text-align:right;">
+-6.989
+</td>
+<td style="text-align:right;">
+8.520
+</td>
+<td style="text-align:right;">
+0.412
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameFulham
+</td>
+<td style="text-align:right;">
+-1.507
+</td>
+<td style="text-align:right;">
+6.744
+</td>
+<td style="text-align:right;">
+0.823
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGenoa
+</td>
+<td style="text-align:right;">
+4.492
+</td>
+<td style="text-align:right;">
+6.211
+</td>
+<td style="text-align:right;">
+0.470
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGetafe
+</td>
+<td style="text-align:right;">
+8.143
+</td>
+<td style="text-align:right;">
+6.258
+</td>
+<td style="text-align:right;">
+0.194
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGirona
+</td>
+<td style="text-align:right;">
+7.912
+</td>
+<td style="text-align:right;">
+8.535
+</td>
+<td style="text-align:right;">
+0.354
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGranada
+</td>
+<td style="text-align:right;">
+-2.330
+</td>
+<td style="text-align:right;">
+6.629
+</td>
+<td style="text-align:right;">
+0.725
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGrenoble
+</td>
+<td style="text-align:right;">
+-14.297
+</td>
+<td style="text-align:right;">
+10.765
+</td>
+<td style="text-align:right;">
+0.185
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGreuther Furth
+</td>
+<td style="text-align:right;">
+-14.090
+</td>
+<td style="text-align:right;">
+10.756
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameGuingamp
+</td>
+<td style="text-align:right;">
+8.823
+</td>
+<td style="text-align:right;">
+6.600
+</td>
+<td style="text-align:right;">
+0.182
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHamburg
+</td>
+<td style="text-align:right;">
+-2.351
+</td>
+<td style="text-align:right;">
+6.333
+</td>
+<td style="text-align:right;">
+0.711
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHannover
+</td>
+<td style="text-align:right;">
+-0.348
+</td>
+<td style="text-align:right;">
+6.262
+</td>
+<td style="text-align:right;">
+0.956
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHercules
+</td>
+<td style="text-align:right;">
+-5.273
+</td>
+<td style="text-align:right;">
+10.794
+</td>
+<td style="text-align:right;">
+0.625
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHertha
+</td>
+<td style="text-align:right;">
+0.197
+</td>
+<td style="text-align:right;">
+6.367
+</td>
+<td style="text-align:right;">
+0.975
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHoffenheim
+</td>
+<td style="text-align:right;">
+4.034
+</td>
+<td style="text-align:right;">
+6.239
+</td>
+<td style="text-align:right;">
+0.518
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHuddersfield
+</td>
+<td style="text-align:right;">
+-11.848
+</td>
+<td style="text-align:right;">
+8.564
+</td>
+<td style="text-align:right;">
+0.167
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHuesca
+</td>
+<td style="text-align:right;">
+0.359
+</td>
+<td style="text-align:right;">
+10.783
+</td>
+<td style="text-align:right;">
+0.973
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameHull
+</td>
+<td style="text-align:right;">
+-6.702
+</td>
+<td style="text-align:right;">
+7.195
+</td>
+<td style="text-align:right;">
+0.352
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameIngolstadt
+</td>
+<td style="text-align:right;">
+2.155
+</td>
+<td style="text-align:right;">
+8.515
+</td>
+<td style="text-align:right;">
+0.800
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameInter
+</td>
+<td style="text-align:right;">
+19.067
+</td>
+<td style="text-align:right;">
+6.512
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameJuventus
+</td>
+<td style="text-align:right;">
+35.988
+</td>
+<td style="text-align:right;">
+6.620
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameKaiserslautern
+</td>
+<td style="text-align:right;">
+-3.339
+</td>
+<td style="text-align:right;">
+8.516
+</td>
+<td style="text-align:right;">
+0.695
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLa Coruna
+</td>
+<td style="text-align:right;">
+-0.945
+</td>
+<td style="text-align:right;">
+6.475
+</td>
+<td style="text-align:right;">
+0.884
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLas Palmas
+</td>
+<td style="text-align:right;">
+-1.758
+</td>
+<td style="text-align:right;">
+7.632
+</td>
+<td style="text-align:right;">
+0.818
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLazio
+</td>
+<td style="text-align:right;">
+19.535
+</td>
+<td style="text-align:right;">
+6.277
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLe Mans
+</td>
+<td style="text-align:right;">
+-6.611
+</td>
+<td style="text-align:right;">
+10.774
+</td>
+<td style="text-align:right;">
+0.540
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLecce
+</td>
+<td style="text-align:right;">
+2.654
+</td>
+<td style="text-align:right;">
+8.505
+</td>
+<td style="text-align:right;">
+0.755
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLeganes
+</td>
+<td style="text-align:right;">
+4.681
+</td>
+<td style="text-align:right;">
+7.637
+</td>
+<td style="text-align:right;">
+0.540
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLeicester
+</td>
+<td style="text-align:right;">
+10.876
+</td>
+<td style="text-align:right;">
+6.972
+</td>
+<td style="text-align:right;">
+0.119
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLens
+</td>
+<td style="text-align:right;">
+1.853
+</td>
+<td style="text-align:right;">
+7.607
+</td>
+<td style="text-align:right;">
+0.808
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLevante
+</td>
+<td style="text-align:right;">
+6.982
+</td>
+<td style="text-align:right;">
+6.323
+</td>
+<td style="text-align:right;">
+0.270
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLeverkusen
+</td>
+<td style="text-align:right;">
+13.285
+</td>
+<td style="text-align:right;">
+6.420
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLille
+</td>
+<td style="text-align:right;">
+22.456
+</td>
+<td style="text-align:right;">
+6.218
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLiverpool
+</td>
+<td style="text-align:right;">
+20.529
+</td>
+<td style="text-align:right;">
+6.639
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLivorno
+</td>
+<td style="text-align:right;">
+-10.482
+</td>
+<td style="text-align:right;">
+8.512
+</td>
+<td style="text-align:right;">
+0.219
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLorient
+</td>
+<td style="text-align:right;">
+9.201
+</td>
+<td style="text-align:right;">
+6.320
+</td>
+<td style="text-align:right;">
+0.146
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameLyon
+</td>
+<td style="text-align:right;">
+24.609
+</td>
+<td style="text-align:right;">
+6.365
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameM’gladbach
+</td>
+<td style="text-align:right;">
+8.672
+</td>
+<td style="text-align:right;">
+6.271
+</td>
+<td style="text-align:right;">
+0.167
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMainz
+</td>
+<td style="text-align:right;">
+6.270
+</td>
+<td style="text-align:right;">
+6.165
+</td>
+<td style="text-align:right;">
+0.309
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMalaga
+</td>
+<td style="text-align:right;">
+5.060
+</td>
+<td style="text-align:right;">
+6.285
+</td>
+<td style="text-align:right;">
+0.421
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMallorca
+</td>
+<td style="text-align:right;">
+8.417
+</td>
+<td style="text-align:right;">
+7.168
+</td>
+<td style="text-align:right;">
+0.241
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMan City
+</td>
+<td style="text-align:right;">
+31.223
+</td>
+<td style="text-align:right;">
+6.771
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMan United
+</td>
+<td style="text-align:right;">
+26.367
+</td>
+<td style="text-align:right;">
+6.735
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMarseille
+</td>
+<td style="text-align:right;">
+20.298
+</td>
+<td style="text-align:right;">
+6.366
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMetz
+</td>
+<td style="text-align:right;">
+0.670
+</td>
+<td style="text-align:right;">
+7.631
+</td>
+<td style="text-align:right;">
+0.930
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMiddlesbrough
+</td>
+<td style="text-align:right;">
+-12.931
+</td>
+<td style="text-align:right;">
+10.835
+</td>
+<td style="text-align:right;">
+0.233
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMilan
+</td>
+<td style="text-align:right;">
+20.270
+</td>
+<td style="text-align:right;">
+6.499
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMonaco
+</td>
+<td style="text-align:right;">
+22.601
+</td>
+<td style="text-align:right;">
+6.504
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameMontpellier
+</td>
+<td style="text-align:right;">
+17.538
+</td>
+<td style="text-align:right;">
+6.147
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNancy
+</td>
+<td style="text-align:right;">
+5.581
+</td>
+<td style="text-align:right;">
+6.812
+</td>
+<td style="text-align:right;">
+0.413
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNantes
+</td>
+<td style="text-align:right;">
+13.236
+</td>
+<td style="text-align:right;">
+6.602
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNapoli
+</td>
+<td style="text-align:right;">
+29.276
+</td>
+<td style="text-align:right;">
+6.450
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNewcastle
+</td>
+<td style="text-align:right;">
+2.648
+</td>
+<td style="text-align:right;">
+6.499
+</td>
+<td style="text-align:right;">
+0.684
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNice
+</td>
+<td style="text-align:right;">
+15.485
+</td>
+<td style="text-align:right;">
+6.165
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNimes
+</td>
+<td style="text-align:right;">
+18.973
+</td>
+<td style="text-align:right;">
+10.779
+</td>
+<td style="text-align:right;">
+0.079
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNorwich
+</td>
+<td style="text-align:right;">
+0.516
+</td>
+<td style="text-align:right;">
+7.152
+</td>
+<td style="text-align:right;">
+0.942
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNovara
+</td>
+<td style="text-align:right;">
+-3.157
+</td>
+<td style="text-align:right;">
+10.757
+</td>
+<td style="text-align:right;">
+0.769
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameNurnberg
+</td>
+<td style="text-align:right;">
+-2.588
+</td>
+<td style="text-align:right;">
+6.599
+</td>
+<td style="text-align:right;">
+0.695
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameOsasuna
+</td>
+<td style="text-align:right;">
+2.551
+</td>
+<td style="text-align:right;">
+6.608
+</td>
+<td style="text-align:right;">
+0.700
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+namePaderborn
+</td>
+<td style="text-align:right;">
+-2.360
+</td>
+<td style="text-align:right;">
+10.763
+</td>
+<td style="text-align:right;">
+0.826
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+namePalermo
+</td>
+<td style="text-align:right;">
+5.712
+</td>
+<td style="text-align:right;">
+6.460
+</td>
+<td style="text-align:right;">
+0.377
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameParis SG
+</td>
+<td style="text-align:right;">
+32.850
+</td>
+<td style="text-align:right;">
+6.616
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameParma
+</td>
+<td style="text-align:right;">
+8.393
+</td>
+<td style="text-align:right;">
+6.458
+</td>
+<td style="text-align:right;">
+0.194
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+namePescara
+</td>
+<td style="text-align:right;">
+-13.924
+</td>
+<td style="text-align:right;">
+8.509
+</td>
+<td style="text-align:right;">
+0.102
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+namePortsmouth
+</td>
+<td style="text-align:right;">
+-13.578
+</td>
+<td style="text-align:right;">
+10.817
+</td>
+<td style="text-align:right;">
+0.210
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameQPR
+</td>
+<td style="text-align:right;">
+-11.281
+</td>
+<td style="text-align:right;">
+7.713
+</td>
+<td style="text-align:right;">
+0.144
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameRB Leipzig
+</td>
+<td style="text-align:right;">
+19.223
+</td>
+<td style="text-align:right;">
+7.797
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameReading
+</td>
+<td style="text-align:right;">
+-9.597
+</td>
+<td style="text-align:right;">
+10.765
+</td>
+<td style="text-align:right;">
+0.373
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameReal Madrid
+</td>
+<td style="text-align:right;">
+36.060
+</td>
+<td style="text-align:right;">
+6.930
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameReims
+</td>
+<td style="text-align:right;">
+10.684
+</td>
+<td style="text-align:right;">
+6.809
+</td>
+<td style="text-align:right;">
+0.117
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameRennes
+</td>
+<td style="text-align:right;">
+12.396
+</td>
+<td style="text-align:right;">
+6.205
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameRoma
+</td>
+<td style="text-align:right;">
+27.675
+</td>
+<td style="text-align:right;">
+6.421
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSampdoria
+</td>
+<td style="text-align:right;">
+9.201
+</td>
+<td style="text-align:right;">
+6.285
+</td>
+<td style="text-align:right;">
+0.144
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSantander
+</td>
+<td style="text-align:right;">
+-2.668
+</td>
+<td style="text-align:right;">
+7.654
+</td>
+<td style="text-align:right;">
+0.727
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSassuolo
+</td>
+<td style="text-align:right;">
+7.513
+</td>
+<td style="text-align:right;">
+6.640
+</td>
+<td style="text-align:right;">
+0.258
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSchalke 04
+</td>
+<td style="text-align:right;">
+8.267
+</td>
+<td style="text-align:right;">
+6.394
+</td>
+<td style="text-align:right;">
+0.196
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSevilla
+</td>
+<td style="text-align:right;">
+15.655
+</td>
+<td style="text-align:right;">
+6.394
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSiena
+</td>
+<td style="text-align:right;">
+0.181
+</td>
+<td style="text-align:right;">
+7.611
+</td>
+<td style="text-align:right;">
+0.981
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSochaux
+</td>
+<td style="text-align:right;">
+6.237
+</td>
+<td style="text-align:right;">
+6.822
+</td>
+<td style="text-align:right;">
+0.361
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSociedad
+</td>
+<td style="text-align:right;">
+10.784
+</td>
+<td style="text-align:right;">
+6.355
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSouthampton
+</td>
+<td style="text-align:right;">
+5.659
+</td>
+<td style="text-align:right;">
+6.632
+</td>
+<td style="text-align:right;">
+0.394
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSp Gijon
+</td>
+<td style="text-align:right;">
+1.354
+</td>
+<td style="text-align:right;">
+6.815
+</td>
+<td style="text-align:right;">
+0.843
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSpal
+</td>
+<td style="text-align:right;">
+5.403
+</td>
+<td style="text-align:right;">
+8.528
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSt Etienne
+</td>
+<td style="text-align:right;">
+17.496
+</td>
+<td style="text-align:right;">
+6.211
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSt Pauli
+</td>
+<td style="text-align:right;">
+-7.478
+</td>
+<td style="text-align:right;">
+10.760
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameStoke
+</td>
+<td style="text-align:right;">
+2.903
+</td>
+<td style="text-align:right;">
+6.386
+</td>
+<td style="text-align:right;">
+0.649
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameStrasbourg
+</td>
+<td style="text-align:right;">
+10.056
+</td>
+<td style="text-align:right;">
+8.529
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameStuttgart
+</td>
+<td style="text-align:right;">
+-0.203
+</td>
+<td style="text-align:right;">
+6.338
+</td>
+<td style="text-align:right;">
+0.974
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSunderland
+</td>
+<td style="text-align:right;">
+-3.306
+</td>
+<td style="text-align:right;">
+6.461
+</td>
+<td style="text-align:right;">
+0.609
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameSwansea
+</td>
+<td style="text-align:right;">
+3.313
+</td>
+<td style="text-align:right;">
+6.545
+</td>
+<td style="text-align:right;">
+0.613
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameTenerife
+</td>
+<td style="text-align:right;">
+-0.349
+</td>
+<td style="text-align:right;">
+10.762
+</td>
+<td style="text-align:right;">
+0.974
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameTorino
+</td>
+<td style="text-align:right;">
+13.740
+</td>
+<td style="text-align:right;">
+6.479
+</td>
+<td style="text-align:right;">
+0.034
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameTottenham
+</td>
+<td style="text-align:right;">
+23.200
+</td>
+<td style="text-align:right;">
+6.605
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameToulouse
+</td>
+<td style="text-align:right;">
+6.799
+</td>
+<td style="text-align:right;">
+6.172
+</td>
+<td style="text-align:right;">
+0.271
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameTroyes
+</td>
+<td style="text-align:right;">
+-3.297
+</td>
+<td style="text-align:right;">
+7.624
+</td>
+<td style="text-align:right;">
+0.665
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameUdinese
+</td>
+<td style="text-align:right;">
+9.559
+</td>
+<td style="text-align:right;">
+6.198
+</td>
+<td style="text-align:right;">
+0.123
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameValencia
+</td>
+<td style="text-align:right;">
+15.977
+</td>
+<td style="text-align:right;">
+6.474
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameValenciennes
+</td>
+<td style="text-align:right;">
+5.939
+</td>
+<td style="text-align:right;">
+6.821
+</td>
+<td style="text-align:right;">
+0.384
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameValladolid
+</td>
+<td style="text-align:right;">
+2.744
+</td>
+<td style="text-align:right;">
+7.119
+</td>
+<td style="text-align:right;">
+0.700
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameVallecano
+</td>
+<td style="text-align:right;">
+6.320
+</td>
+<td style="text-align:right;">
+6.598
+</td>
+<td style="text-align:right;">
+0.338
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameVerona
+</td>
+<td style="text-align:right;">
+2.948
+</td>
+<td style="text-align:right;">
+7.122
+</td>
+<td style="text-align:right;">
+0.679
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameVillarreal
+</td>
+<td style="text-align:right;">
+14.306
+</td>
+<td style="text-align:right;">
+6.391
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWatford
+</td>
+<td style="text-align:right;">
+2.652
+</td>
+<td style="text-align:right;">
+7.255
+</td>
+<td style="text-align:right;">
+0.715
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWerder Bremen
+</td>
+<td style="text-align:right;">
+3.727
+</td>
+<td style="text-align:right;">
+6.210
+</td>
+<td style="text-align:right;">
+0.549
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWest Brom
+</td>
+<td style="text-align:right;">
+1.313
+</td>
+<td style="text-align:right;">
+6.427
+</td>
+<td style="text-align:right;">
+0.838
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWest Ham
+</td>
+<td style="text-align:right;">
+1.444
+</td>
+<td style="text-align:right;">
+6.411
+</td>
+<td style="text-align:right;">
+0.822
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWigan
+</td>
+<td style="text-align:right;">
+-1.638
+</td>
+<td style="text-align:right;">
+7.188
+</td>
+<td style="text-align:right;">
+0.820
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWolfsburg
+</td>
+<td style="text-align:right;">
+3.589
+</td>
+<td style="text-align:right;">
+6.361
+</td>
+<td style="text-align:right;">
+0.573
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameWolves
+</td>
+<td style="text-align:right;">
+-0.372
+</td>
+<td style="text-align:right;">
+7.180
+</td>
+<td style="text-align:right;">
+0.959
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameXerez
+</td>
+<td style="text-align:right;">
+-4.251
+</td>
+<td style="text-align:right;">
+10.771
+</td>
+<td style="text-align:right;">
+0.693
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nameZaragoza
+</td>
+<td style="text-align:right;">
+0.294
+</td>
+<td style="text-align:right;">
+7.177
+</td>
+<td style="text-align:right;">
+0.967
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+-0.464
+</td>
+<td style="text-align:right;">
+0.128
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+</tbody>
+</table>
+@ref(tab:model parameters) is the list of the parameter and their estimate. We can see that the logmw increase the number of point and it’s a very good point for our assumption. The intercept is very high but it’s balanced the coefficent year which is -0.464 (*2010 for instance). Furthermore we can see that only biggest team have a significant estimate as Man City, Real Madrid, Barcelona etc.. with very high value, around 30. There is of course an impact of the team in the ranking. All others team have a value that are not very significant, it could be because their market value are quite all the same under the 10th rank and their number of points his then more difficult to predict.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:summary-table">Table 3.2: </span>Summary of the model for Premier League
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.738
+</td>
+<td style="text-align:right;">
+0.682
+</td>
+<td style="text-align:right;">
+9.31
+</td>
+<td style="text-align:right;">
+13.3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+172
+</td>
+<td style="text-align:right;">
+-3483
+</td>
+<td style="text-align:right;">
+7312
+</td>
+<td style="text-align:right;">
+8158
+</td>
+<td style="text-align:right;">
+70109
+</td>
+<td style="text-align:right;">
+808
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can see in <a href="project-modelling.html#tab:summary-table">3.2</a>that the Rsquared adjusted is around 68% which is quite good for our small number of explained variables.</p>
+</div>
+<div id="goodness-of-fit" class="section level2">
+<h2><span class="header-section-number">3.2</span> Goodness of fit</h2>
+<p>To Discuss the goodness of the fit we will plot the residuals and have a look at some prediction made by our model.</p>
+<div class="figure" style="text-align: center"><span id="fig:residuals-fig"></span>
+<img src="Project_Group9_report_files/figure-html/residuals-fig-1.png" alt="Residuals vs Log Market value" width="70%" />
+<p class="caption">
+Figure 3.1: Residuals vs Log Market value
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:residuals-fig2"></span>
+<img src="Project_Group9_report_files/figure-html/residuals-fig2-1.png" alt="Residuals vs fitted values" width="70%" />
+<p class="caption">
+Figure 3.2: Residuals vs fitted values
+</p>
+</div>
+<p>The residuals graphs <a href="project-modelling.html#fig:residuals-fig">3.1</a> and <a href="project-modelling.html#fig:residuals-fig2">3.2</a>here ar well randomly spread with a mean of zero for the log market value and for the fitted graph. It’s a good point for our model since their is no clear patern in the residuals that could provide from other information we could have miss.</p>
+<p><img src="Project_Group9_report_files/figure-html/pred-fig-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>In the <a href="#fig:pred-fig"><strong>??</strong></a>,graph of our project we have build a function that take into the fitted number of points reach by a team and built a ranking with. Therefor we have built this graph to have a view on our prediction against the observed ranking. We have selected some year and championship to illustrate this, and we can see that we predict quite well the ranking with obviously some mistakes but they are quite samll in terms of ranking. In fact we have seen in the residuals graphs above that our errors are in majority under 10, and it can seems quite high when you we need approximatively 80 points to be 1st, but in terms of ranking 10 points represent around 2-4 rank. As you can see in the graph the errors in terms of ranking are quite small.</p>
+<p>click here: <a href="project-modelling.html#tab:model-parameters">3.1</a> to go back on the top</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="project-eda.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 PROJECT: EDA | Project Group 9 : the big title</title>
+  <meta name="description" content="2 PROJECT: EDA | Project Group 9 : the big title" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 PROJECT: EDA | Project Group 9 : the big title" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 PROJECT: EDA | Project Group 9 : the big title" />
+  
+  
+  
+
+<meta name="author" content="BAEUMLIN Thomas, RENGER Hadrien" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="project-modelling.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="project-eda.html"><a href="project-eda.html"><i class="fa fa-check"></i><b>2</b> PROJECT: EDA</a><ul>
+<li class="chapter" data-level="2.1" data-path="project-eda.html"><a href="project-eda.html#description-of-the-data"><i class="fa fa-check"></i><b>2.1</b> Description of the data</a></li>
+<li class="chapter" data-level="2.2" data-path="project-eda.html"><a href="project-eda.html#the-evolution-of-player-market-value"><i class="fa fa-check"></i><b>2.2</b> The evolution of player market value</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="project-modelling.html"><a href="project-modelling.html"><i class="fa fa-check"></i><b>3</b> PROJECT: Modelling</a><ul>
+<li class="chapter" data-level="3.1" data-path="project-modelling.html"><a href="project-modelling.html#st-section"><i class="fa fa-check"></i><b>3.1</b> 1st Section</a></li>
+<li class="chapter" data-level="3.2" data-path="project-modelling.html"><a href="project-modelling.html#goodness-of-fit"><i class="fa fa-check"></i><b>3.2</b> Goodness of fit</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Project Group 9 : the big title</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="project-eda" class="section level1">
+<h1><span class="header-section-number">2</span> PROJECT: EDA</h1>
+<div id="description-of-the-data" class="section level2">
+<h2><span class="header-section-number">2.1</span> Description of the data</h2>
+<p>In order to be able to analyse the impact of money in football, we needed on one hand to find some data representing sports results and in the other hand searching for data corresponding to a financial representation of each teams.</p>
+<p>For the financial part we had to modify a scrap script.
+Our goal was to have the player mean market value of every team in the 5 more competitive championships of football for the last 10 years. That means from 2010 to 2019.</p>
+<p>These leagues are:
+-the “Premiere League” from United-Kingdom
+- “La Liga” from Spain
+- the “Serie A” from Italy
+-the “Bundesliga” from Germany
+-the “Ligue 1” from France</p>
+<p>We used 50 tables from <a href="http://www.football-data.co.uk" class="uri">http://www.football-data.co.uk</a>, corresponding to all the matches results per season from the five major leagues for the ten last years.
+We employed these matches results to create a ranking per year et leagues</p>
+</div>
+<div id="the-evolution-of-player-market-value" class="section level2">
+<h2><span class="header-section-number">2.2</span> The evolution of player market value</h2>
+<div class="figure" style="text-align: center"><span id="fig:Map"></span>
+<img src="Project_Group9_report_files/figure-html/Map-1.png" alt="Map showing the mean market value evolution" width="70%" />
+<p class="caption">
+Figure 2.1: Map showing the mean market value evolution
+</p>
+</div>
+<p>The figure <a href="project-eda.html#fig:Map">2.1</a> shows us a clear evolution of the market value per player in the five mains leagues.
+The Bundesliga is the league which have growth the most with a increase of approximately 15 millions in 10 years. Like La Liga, the Bundesliga have a mean market value per player in 2019 approximately from 25 millions.
+England was ahead but progressively got caught.
+The Ligue 1 was lagging behind the mean market value per player from the four others countries but in 10 years made a big jump. France even make up lost ground and doubles Italy which had the poorest evolution, approximately 8 millions.</p>
+<p>Whatever the evolution, football seems to have become more important in each country.</p>
+<div class="figure" style="text-align: center"><span id="fig:Leagues-evolution"></span>
+<img src="Project_Group9_report_files/figure-html/Leagues-evolution-1.png" alt="Evolution of the mean market value per player" width="70%" />
+<p class="caption">
+Figure 2.2: Evolution of the mean market value per player
+</p>
+</div>
+<p>Here we will only take in considerations teams which were present in their league since 2010.
+This graphs <a href="#fig:Leagues-evolutions"><strong>??</strong></a> how us the evolution on the mean market value per player since 2010.
+We can clearly see a rise in each league.
+As seen before <a href="project-eda.html#fig:Map">2.1</a>, the Serie A have the smallest evolution.
+The Bundesliga and the ligue 1 have a similar evolution with one team which increase largely comparing to the others teams of the league. It is almost the same case for Spain but with 2 teams which stand out and since 2017 even 3.
+All the observe teams for the premiere league have a high and tight evolution. England has the most competitive league with a lot of team with high market value.</p>
+<div class="figure" style="text-align: center"><span id="fig:Box-plot"></span>
+<img src="Project_Group9_report_files/figure-html/Box-plot-1.png" alt="Boxplot showing the importance of money" width="70%" />
+<p class="caption">
+Figure 2.3: Boxplot showing the importance of money
+</p>
+</div>
+<p>Regardless of the league, in general it is the team with the highest market value who win <a href="project-eda.html#fig:Box-plot">2.3</a> . The three firsts teams have largely a higher market value and even more the first one.
+Until rank 9, the ranking is consistent with the market value.
+After these rank, we can notice that market value seems to have less impact. However, the difference in the market value is less important.</p>
+<div class="figure" style="text-align: center"><span id="fig:50"></span>
+<img src="Project_Group9_report_files/figure-html/50-1.png" alt="Detailing graph showing the importance of money" width="70%" />
+<p class="caption">
+Figure 2.4: Detailing graph showing the importance of money
+</p>
+</div>
+<p>Let’s look more precisely the influence of money <a href="project-eda.html#fig:50">2.4</a>.
+We can clearly see that in the majority of case the overall winner (point in red) is the one with the highest market value (more on the right of each axis). On the contrary the last one (point in orange) is rarely the one with the less market value.</p>
+<p>In Ligue 1, Serie A and Bundesliga, it is often the team with the highest mean player market value who win, with respectively 7, 9 and 8 times out of ten.
+For Spain it is a little bit better, since 2010, the champion was 6 time the team with the highest market value.
+In England it always 4 time the case. A seen before it is the league where all the team had an evolution in there mean market value. This is the league the most competitive and that is why even more complicate to be champion even if you have the most money.</p>
+<p>Concerning the last place in Spain and England, since 2010 it is never the team with the poorest mean market value per player which was the last of the ranking. It was only the case 2 times in Italy and France but 6 times in Germany.</p>
+<div class="figure" style="text-align: center"><span id="fig:dominated"></span>
+<img src="Project_Group9_report_files/figure-html/dominated-1.png" alt="Graph showing leagues ultra dominated" width="70%" />
+<p class="caption">
+Figure 2.5: Graph showing leagues ultra dominated
+</p>
+</div>
+<p>As seen before <a href="project-eda.html#fig:50">2.4</a> , the champions are often the teams with the highest mean market value per player.<br />
+Specially for the leagues of Germany, Spain, France and Italy <a href="project-eda.html#fig:dominated">2.5</a>
+It is less visible in Spain where 2 teams: Real Madrid and Barcelona with high market value share the title.</p>
+<div class="figure" style="text-align: center"><span id="fig:England"></span>
+<img src="Project_Group9_report_files/figure-html/England-1.png" alt="Graph showing a tight championship" width="70%" />
+<p class="caption">
+Figure 2.6: Graph showing a tight championship
+</p>
+</div>
+<p>In England <a href="project-eda.html#fig:England">2.6</a> a lot of teams have high market value and contrary as others leagues it is not just one or two teams which a high market value which dominate the league. It is a very competitive league where a lot of teams can win and not necessarily the richest one. The best example is Leicester which win the league in 2016 with 4th lowest market value per player.</p>
+<div class="figure" style="text-align: center"><span id="fig:leagues-rank-mv"></span>
+<img src="Project_Group9_report_files/figure-html/leagues-rank-mv-1.png" alt="Graph of the evolution of the market value per rankig in each league" width="70%" />
+<p class="caption">
+Figure 2.7: Graph of the evolution of the market value per rankig in each league
+</p>
+</div>
+<p>This graphs <a href="project-eda.html#fig:leagues-rank-mv">2.7</a> justify what we see above <a href="project-eda.html#fig:dominated">2.5</a>.
+Indeed, the difference in term of market value between the first teams and the others is less important in England than in others countries. Moreover, the premiere league is the only league where the firsts 6 teams have a so small difference in term of mean market value per player, approximately 4 millions. In contrary to others leagues there is a smaller disparity. That is why it is the most attractive league.</p>
+<pre><code>#&gt; List of 1
+#&gt;  $ legend.position: chr &quot;bottom&quot;
+#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
+#&gt;  - attr(*, &quot;complete&quot;)= logi FALSE
+#&gt;  - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:Disparity"></span>
+<img src="Project_Group9_report_files/figure-html/Disparity-1.png" alt="Graph showing all the disparities" width="70%" />
+<p class="caption">
+Figure 2.8: Graph showing all the disparities
+</p>
+</div>
+<p>These graphs <a href="project-eda.html#fig:Disparity">2.8</a> show us the disparities which appears since 2010.
+First regarding the number of points, the difference between the first and the last had increase a lot.
+Then concerning the mean market value per player, the richest have a faster increase than the poorest.</p>
+<p>The best teams (with more money) have more points and vise versa.
+However, there is no much change in the number of points for teams in the middle of the ranking. This can be explained by the fact that now they are not able anymore to win against the richest teams but the poorest teams are not able to beat them. All results are more predictable and football become less interesting.</p>
+<div class="figure" style="text-align: center"><span id="fig:Championsleague"></span>
+<img src="Project_Group9_report_files/figure-html/Championsleague-1.png" alt="Graph representing the winners of the Champions league" width="70%" />
+<p class="caption">
+Figure 2.9: Graph representing the winners of the Champions league
+</p>
+</div>
+<p>The Champions League is a completely different competition, where comparing to the leagues, money seems to have less impact <a href="project-eda.html#fig:Championsleague">2.9</a>. During 10 years, the team with the highest market value won only 4 times.
+It is a competition comparable to Premiere League <a href="project-eda.html#fig:England">2.6</a>, where there is a lot of teams with high market value.</p>
+<p>Soccer is a collectif sport where
+Le football est un sport collectif où il ne suffit pas d’aligner des stars. des equipes aavec un assemblment de joueurs a tres faible market value peuvent performer tres bien et cela est imprevisible.
+graph map</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="project-modelling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

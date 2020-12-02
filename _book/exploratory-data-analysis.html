@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Exploratory Data Analysis | Project Group 9 : The influence of market value in football</title>
+  <meta name="description" content="2 Exploratory Data Analysis | Project Group 9 : The influence of market value in football" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Exploratory Data Analysis | Project Group 9 : The influence of market value in football" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Exploratory Data Analysis | Project Group 9 : The influence of market value in football" />
+  
+  
+  
+
+<meta name="author" content="BAEUMLIN Thomas, RENGER Hadrien" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="modeling.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#why-this-subject"><i class="fa fa-check"></i><b>1.1</b> Why this subject ?</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#description-of-the-data"><i class="fa fa-check"></i><b>1.2</b> Description of the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#a-high-evolution-in-term-of-player-market-value"><i class="fa fa-check"></i><b>2.1</b> A high evolution in term of player market value</a></li>
+<li class="chapter" data-level="2.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-power-of-money"><i class="fa fa-check"></i><b>2.2</b> The power of money</a></li>
+<li class="chapter" data-level="2.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#disparities-in-football"><i class="fa fa-check"></i><b>2.3</b> Disparities in Football</a></li>
+<li class="chapter" data-level="2.4" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#the-champions-league"><i class="fa fa-check"></i><b>2.4</b> The Champions League</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>3</b> Modeling</a><ul>
+<li class="chapter" data-level="3.1" data-path="modeling.html"><a href="modeling.html#model"><i class="fa fa-check"></i><b>3.1</b> Model</a></li>
+<li class="chapter" data-level="3.2" data-path="modeling.html"><a href="modeling.html#goodness-of-fit"><i class="fa fa-check"></i><b>3.2</b> Goodness of fit</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Project Group 9 : The influence of market value in football</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="exploratory-data-analysis" class="section level1">
+<h1><span class="header-section-number">2</span> Exploratory Data Analysis</h1>
+<p>First of all, it is important to know that a team with a high mean market value per player is a team which had a lot of money. Indeed, players with high market value have higher salaries and by definition are more expensive to buy/sell.</p>
+<p>For us the mean market value per player will be an indicator of wealth.</p>
+<div id="a-high-evolution-in-term-of-player-market-value" class="section level2">
+<h2><span class="header-section-number">2.1</span> A high evolution in term of player market value</h2>
+<div class="figure" style="text-align: center"><span id="fig:Map"></span>
+<img src="Project_Group9_report_files/figure-html/Map-1.png" alt="Map showing the mean market value evolution" width="70%" />
+<p class="caption">
+Figure 2.1: Map showing the mean market value evolution
+</p>
+</div>
+<p>The figure <a href="exploratory-data-analysis.html#fig:Map">2.1</a> shows us a clear evolution of the market value per player in the five main leagues since 2010.</p>
+<p>The Bundesliga is the league, which has growth the most with an increase of approximately 15 millions euros in 10 years. As La Liga, the Bundesliga has a mean market value per player of 25 millions euros in 2019.
+England was ahead, but progressively got caught.
+The Ligue 1 was lagging behind the mean market value per player from the four other countries, but in 10 years made a big jump. France catch up Italy, which had the poorest evolution of approximately 8 millions.</p>
+<p>Whatever the evolution, football seems to have become more important in each country.</p>
+<div class="figure" style="text-align: center"><span id="fig:Leagues-evolution"></span>
+<img src="Project_Group9_report_files/figure-html/Leagues-evolution-1.png" alt="Evolution of the mean market value per player" width="70%" />
+<p class="caption">
+Figure 2.2: Evolution of the mean market value per player
+</p>
+</div>
+<p>Here we will take in considerations teams which were present in their leagues since 2010.</p>
+<p>The graph <a href="exploratory-data-analysis.html#fig:Leagues-evolution">2.2</a> shows us their evolution in terms of mean market value per player.</p>
+<p>We can clearly see a raise in each league.
+As seen before <a href="exploratory-data-analysis.html#fig:Map">2.1</a>, the Serie A have the smallest evolution. Apart from Juventus and on a smaller scale, Napoli and Milan AC. The mean market value per players from all the others teams seem to stagnate.
+The Bundesliga and the Ligue 1 have a similar evolution with only one team raising, which increase largely diffrences between others teams of the league. FC Bayern Munchen in Germany and Paris Saint-Germain in France with respectively an evolution going from 10 to 25 millions and from 4 to 21 millions euros in ten years. Few teams from both leagues increase on a smaller scale like BVB Dortmund, Bayer Leverkusen or Olymplique Lyonnais.<br />
+It is almost the same case for Spain, but with 2 teams which stand out, FC Barcelona and Real Madrid FC with an evolution of 10 millions in 10 years. Since 2017 an other team stand out: Athletico Madrid with an evolution of 10 millions in the 3 last years. All other teams have a small evolution.
+All the observed teams in the Premiere League have a high and tight evolution. Only Evcerton FC is trailing behind. In contrary to others leagues, in England it is a grouped evolution. Five teams exceed the 18 million mean market value per player.</p>
+</div>
+<div id="the-power-of-money" class="section level2">
+<h2><span class="header-section-number">2.2</span> The power of money</h2>
+<div class="figure" style="text-align: center"><span id="fig:Box-plot"></span>
+<img src="Project_Group9_report_files/figure-html/Box-plot-1.png" alt="Boxplot showing the importance of money" width="70%" />
+<p class="caption">
+Figure 2.3: Boxplot showing the importance of money
+</p>
+</div>
+<p>Regardless the league, it is the team with the highest market value who is the champion at the end ( <a href="exploratory-data-analysis.html#fig:Box-plot">2.3</a>). The three firsts teams have a large higher market value. Specially the first one, with a median of 13 millions, corresponding to 4 millions more than the second one.
+Until rank 9, the ranking is consistent with the market value.
+After these ranks, we can notice that market values seems to have less impact. However, the difference in the market value is less important. From place 10 to 20, the difference in the median for each team is less than 1 million and 4 millions starting from rank 4.</p>
+<div class="figure" style="text-align: center"><span id="fig:50"></span>
+<img src="Project_Group9_report_files/figure-html/50-1.png" alt="Detailing graph from the rankings" width="70%" />
+<p class="caption">
+Figure 2.4: Detailing graph from the rankings
+</p>
+</div>
+<p>Let’s look more in detail at the influence of money <a href="exploratory-data-analysis.html#fig:50">2.4</a>.
+We can clearly see that the ranking increase with the mean market value per player, better your mean market value per player is and better your ranking would be.</p>
+<p>In majority the overall winner (point in red) is the one with the highest market value (more on the right part of each x-axis). In contrary to the last one (point in orange) which is rarely the one with the less market value.</p>
+<p>In Ligue 1, Serie A and Bundesliga, it is often the team with the highest mean player market value who win, with respectively 7, 9 and 8 times out of ten.
+In Spain it is a little bit better, since 2010, the champion was 6 times the team with the highest market value.
+In England, it is only 4 times the case. As seen before <a href="exploratory-data-analysis.html#fig:Leagues-evolution">2.2</a> it is the league where there was a grouped evolution in in term of mean market value per player. This league is the most competitive and that is why it is even more complicate to be champion even if you have the most money.</p>
+<p>Concerning the last place in Spain and England, since 2010 it is never the team with the poorest market value which was the last of the ranking. It was only the case 2 times in Italy and France, but 6 times in Germany. It is because there are no big differences between the last ranks in term of market value <a href="exploratory-data-analysis.html#fig:Box-plot">2.3</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:dominated"></span>
+<img src="Project_Group9_report_files/figure-html/dominated-1.png" alt="Graph showing leagues ultra dominated" width="70%" />
+<p class="caption">
+Figure 2.5: Graph showing leagues ultra dominated
+</p>
+</div>
+<p>As seen before <a href="exploratory-data-analysis.html#fig:50">2.4</a> , the champions are often the teams with the highest mean market value per player.</p>
+<p>As shown in <a href="exploratory-data-analysis.html#fig:Leagues-evolution">2.2</a>, in the majority of the leagues, one or two teams dominate the others in terms of market value. This differentiation is visible in term of ranking <a href="exploratory-data-analysis.html#fig:dominated">2.5</a>.</p>
+<p>Indeed FC Bayern Munich , Paris SG and Juventus which clearly dominated their leagues in terms of market value, were champions respectively 8 times, 6 times and 8 times out of 10.
+Concerning La Liga, Real Madrid FC and FC Barcelona shared the first place for 9 years with 3 titles for Real Madrid and 6 for FC Barcelona.
+There is not a lot of suspense regarding these leagues <a href="exploratory-data-analysis.html#fig:dominated">2.5</a>.</p>
+<p>The Premiere League is the only league where there is not a clear domination.</p>
+<div class="figure" style="text-align: center"><span id="fig:England"></span>
+<img src="Project_Group9_report_files/figure-html/England-1.png" alt="Graph showing a tight championship" width="70%" />
+<p class="caption">
+Figure 2.6: Graph showing a tight championship
+</p>
+</div>
+<p>In England <a href="exploratory-data-analysis.html#fig:England">2.6</a> a lot of teams have high market value and contrary as other leagues it is not just one or two teams. It is a very competitive league where a lot of teams can win and not necessarily the richest one. The best example is Leicester which wins the league in 2016 with the 4th lowest market value per player.</p>
+<div class="figure" style="text-align: center"><span id="fig:leagues-rank-mv"></span>
+<img src="Project_Group9_report_files/figure-html/leagues-rank-mv-1.png" alt="A graph of the evolution of the market value per ranking in each league" width="70%" />
+<p class="caption">
+Figure 2.7: A graph of the evolution of the market value per ranking in each league
+</p>
+</div>
+<p>The graph <a href="exploratory-data-analysis.html#fig:leagues-rank-mv">2.7</a> justify what we have seen above <a href="exploratory-data-analysis.html#fig:dominated">2.5</a>.
+Indeed, the difference in term of market value between the first teams and the others is less important in England than in other countries. Moreover, the Premiere League is the only league where the firsts 6 teams have a so small difference in term of market value, approximately 4 millions. In contrary to other leagues, there is a smaller disparity and more surprise can appear as shown in <a href="exploratory-data-analysis.html#fig:England">2.6</a>. That is why it is the most attractive league.</p>
+</div>
+<div id="disparities-in-football" class="section level2">
+<h2><span class="header-section-number">2.3</span> Disparities in Football</h2>
+<div class="figure" style="text-align: center"><span id="fig:Disparity"></span>
+<img src="Project_Group9_report_files/figure-html/Disparity-1.png" alt="Graphs showing various growing disparities about rankings" width="70%" />
+<p class="caption">
+Figure 2.8: Graphs showing various growing disparities about rankings
+</p>
+</div>
+<p>These graphs <a href="exploratory-data-analysis.html#fig:Disparity">2.8</a> show us the disparities which appears since 2010.</p>
+<p>First regarding the number of points, the difference between the first and the last rank had increase a lot.
+Then concerning the mean market value per player, the firsts places have a faster increase than the lasts ones in term of mean market value per players.</p>
+<p>The best teams (with more money) have more points and vise versa.
+However, there is no much change in the number of points for teams in the middle of the ranking. This can be explained by the fact that now they are not able anymore to win against the richest teams but the poorest teams are not able to beat them. All results are more predictable and football become less interesting.</p>
+</div>
+<div id="the-champions-league" class="section level2">
+<h2><span class="header-section-number">2.4</span> The Champions League</h2>
+<div class="figure" style="text-align: center"><span id="fig:Championsleague"></span>
+<img src="Project_Group9_report_files/figure-html/Championsleague-1.png" alt="Graph representing the winners of the Champions league" width="70%" />
+<p class="caption">
+Figure 2.9: Graph representing the winners of the Champions league
+</p>
+</div>
+<p>The champions league is a competition regrouping the best teams of each league in Europe. Which means the richest teams with the highest market value of Europe. It is a competition comparable to the Premiere League (<a href="exploratory-data-analysis.html#fig:England">2.6</a>), where there are a lot of teams with high market value. Money have less impact because you play against teams which had approximately the same market value. That creates a more competitive competition, very difficult to win. Indeed, during 10 years, teams with the highest market value won only 4 times (<a href="exploratory-data-analysis.html#fig:Championsleague">2.9</a>).</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

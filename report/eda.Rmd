@@ -1,0 +1,488 @@
+
+``````{r  warning=FALSE, message=FALSE, echo = FALSE}
+
+
+mw_table=read_csv(file = here::here("Data/mw_table.csv"))
+
+```
+
+# Exploratory Data Analysis
+
+First of all, it is important to know that a team with a high mean market value per player is a team which had a lot of money. Indeed, players with high market value have higher salaries and by definition are more expensive to buy/sell.
+
+For us the mean market value per player will be an indicator of wealth. 
+
+## A high evolution in term of player market value
+
+```{r Map, fig.cap="Map showing the mean market value evolution", fig.asp = 0.8, fig.width = 6, fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+
+worldmap <- map_data("world")
+
+worldmap = worldmap %>% rename(country = region)
+
+
+table_map = mw_table %>% mutate(country = "France")
+table_map$country[table_map$league == "Premier League"] = "UK"
+table_map$country[table_map$league == "1. Bundesliga"] = "Germany"
+table_map$country[table_map$league == "Serie A"] = "Italy"
+table_map$country[table_map$league == "LaLiga"] = "Spain"
+
+
+table_map=table_map %>%
+  group_by(year,country)%>%
+  summarise(meanvalue=mean(mw))
+
+table_map = left_join(table_map, worldmap, "country")
+
+
+
+table_map%>%
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = meanvalue), color = "white") +
+  scale_fill_viridis_c(option = "C", breaks = seq(0, 16, by =3 )) +
+  labs(
+    title = "A rapid evolution of the mean market value per player",
+    subtitle = "In the 5 competitives leagues of Europe",
+    x = "",
+    y = "",
+    fill = "Mean market value per player (in millions)"
+  ) +
+  facet_wrap( ~ year, ncol = 5) +
+  theme(
+    plot.title = element_text(color = "darkred",
+                              size = 14,
+                              face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.text = element_blank()
+  ) +
+  theme(legend.position = "bottom")
+
+```
+
+The figure \@ref(fig:Map) shows us a clear evolution of the market value per player in the five main leagues since 2010.
+
+England is far ahead since the 2010. Indeed, the Premier League has the highest rise with an increase of mean market value of approximately 5 million euros in 10 years. La Liga and the Bundesligua have a slower evolution respectively from 4 to 7 million and 3 to 6 million.
+The Ligue 1 was lagging behind the mean market value per player from the four other countries, but in 10 years made a nice progress and almost catch up Italy, which had the smallest growth of only 1.5 million in 10 years.
+
+Whatever the evolution, football seems to have become more important in each country. 
+
+
+```{r Leagues-evolution, fig.cap="Evolution of the mean market value per player",fig.asp = 1, fig.width = 11, fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+
+PremierLeagueSalaryTop7 = mw_table %>% filter(
+  name == "Chelsea" |
+    name == "Man United" |
+    name == "Tottenham" |
+    name == "Man City" |
+    name == "Arsenal" | 
+    name == "Everton" | 
+    name == "Liverpool"
+)
+
+LigueEspagnolSalaryTop7 = mw_table %>% filter(
+  name == "Ath Bilbao" |
+    name == "Ath Madrid" |
+    name == "Espanol" |
+    name == "Barcelona" |
+    name == "Sevilla" | 
+    name == "Valencia" | 
+    name == "Real Madrid"
+)
+
+Ligue1Top10 = mw_table %>% filter(
+  name == "St Etienne" |
+    name == "Toulouse" |
+    name == "Bordeaux" |
+    name == "Montpellier" |
+    name == "Lille" |
+    name == "Nice" |
+    name == "Marseille" |
+    name == "Lyon" | 
+    name == "Paris SG" | 
+    name == "Rennes"
+)
+
+BundesligaTop9 = mw_table %>% filter(
+  name == "Mainz" |
+    name == "Leverkusen" |
+    name == "Bayern Munich" |
+    name == "Dortmund" |
+    name == "M'gladbach" |
+    name == "Schalke 04" |
+    name == "Hoffenheim" | 
+    name == "Wolfsburg" | 
+    name == "Werder Bremen"
+)
+
+SerieATop8 = mw_table %>% filter(
+  name == "Fiorentina" |
+    name == "Milan" |
+    name == "Roma" |
+    name == "Chievo" |
+    name == "Genoa" | 
+    name == "Juventus" |
+    name == "Lazio" | 
+    name == "Napoli"
+)
+
+
+SalaryOldClub = rbind(
+  SerieATop8,
+  BundesligaTop9,
+  Ligue1Top10,
+  PremierLeagueSalaryTop7,
+  LigueEspagnolSalaryTop7
+)
+
+SalaryOldClubname = SalaryOldClub %>% filter(year == "2013")
+
+ggplot(SalaryOldClub, aes(x = year, y = mw, col = name)) +
+  geom_line() + facet_wrap(~ league) +
+  theme(legend.position = "none") +
+  labs(
+    title = "A rise in mean market value per player",
+    subtitle = "For teams present  since 2010",
+    x = "Years",
+    y = "Mean market value per player (in millions)"
+  ) +
+  ggrepel::geom_label_repel(aes(label = name), data = SalaryOldClubname) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 20, face = "bold.italic"),
+    plot.subtitle = element_text(size = 18, face = "italic"),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14)
+  ) +
+  scale_x_continuous(breaks = c(2011, 2013, 2015, 2017, 2019))
+
+
+```
+Here we will take in considerations teams which were present in their league since 2010. 
+
+The graph \@ref(fig:Leagues-evolution) shows us their evolution in term of mean market value per player.
+
+We can clearly see a rise in each league. 
+As seen before  \@ref(fig:Map), the Serie A have the smallest evolution. Apart from Juventus and on a smaller scale, Napoli and Milan AC, the mean market value per players from all the others teams seem to stagnate.
+
+The Bundesliga and the Ligue 1 have a similar evolution with one team increasing largely compared to the others. FC Bayern Munchen in Germany and Paris Saint-Germain in France with respectively an evolution going from 10 to 25 million and from 4 to 21 million in ten years. Few teams from both leagues increase on a smaller scale like BVB Dortmund, Bayer Leverkusen or Olymplique  Lyonnais.  
+It is almost the same case for Spain, but with 2 teams which stand out, FC Barcelona and Real Madrid FC with an evolution of 10 million in 10 years. Since 2017 an other team stand out: Athletico Madrid with an evolution of 10 million in the 3 last years. All other teams have at least a small evolution.
+
+All the observed teams in the Premier League have a high and tight evolution. Only Everton FC is trailing behind. In contrary to others league, in England, it is a group evolution. Five teams exceed the 18 million mean market value per player.
+
+
+## The power of money
+
+```{r Box-plot, fig.cap="Boxplot showing the importance of money", fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+mw_table  %>% ggplot(aes(x = ranking, y = mw, group = ranking)) +
+  geom_boxplot() +
+  labs(
+    title = "The classification depends on the price of the workforce",
+    subtitle = "Regarding of all the league",
+    x = "Ranking",
+    y = "Mean market value per player (in millions)"
+  ) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  ) +
+  scale_x_continuous(breaks = c(1:20))
+```
+
+Regardless of the league, in general, it is the team with the highest market value who is the champion at the end ( \@ref(fig:Box-plot)). The three firsts teams have largely a higher market value. Specially the first one with a median of 13 million, corresponding to 4 million more than the second one.
+Until rank 9, the ranking is consistent with the market value. 
+After these ranks, we can notice that market value seems to have less impact. However, the difference in the market value is less important. From place 10 to 20, the difference in the median for each team is less than 1 million and 4 million starting from rank 4.
+
+
+```{r 50, fig.cap="Detailing graph from the rankings", fig.asp = 1.2, fig.width = 10, fig.align = 'center', , warning=FALSE, message=FALSE, echo = FALSE}
+
+rank1 = mw_table %>% filter(ranking == "1")
+ranklast = mw_table %>% filter((ranking == "18" &
+                                league == "1. Bundesliga") |
+                                 ranking == "20")
+
+mw_table %>% ggplot(aes(x = mw, y = ranking)) +
+  geom_point() +
+  geom_point(data = rank1, col = "red") +
+  geom_point(data = ranklast, col = "orange") +
+  labs(
+    title = "Time goes by and it is still the same story",
+    subtitle = "A look per years and per leagues",
+    y = "Ranking",
+    x = "Mean market value per player"
+  ) +
+  facet_grid(year ~ league) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 20, face = "bold.italic"),
+    plot.subtitle = element_text(size = 18, face = "italic"),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14)
+  )
+
+
+```
+Let’s look more in detail at the influence of money  \@ref(fig:50). 
+We can clearly see that the ranking increase with the mean market value per player, better your mean market value per player is and better your ranking would be.
+
+In majority the overall winner (point in red) is the one with the highest market value (more on the right part of each x-axis). In contrary to the last one (point in orange) which is rarely the one with the less market value.
+
+In Ligue 1, Serie A and Bundesliga, it is often the team with the highest mean player market value who win, with respectively 7, 9 and 8 times out of ten.
+In Spain it is a little bit better, since 2010, the champion was 6 times the team with the highest market value. 
+In England, it is only 4 times the case. As seen before \@ref(fig:Leagues-evolution) it is the league where there was a grouped evolution  in term of mean market value per player. This is the league the most competitive and that is why it is even more complicate to be champion even if you have the most money.
+
+Concerning the last place in Spain and England, since 2010 it is never the team with the poorest mean market value per player which was the last of the ranking. It was only the case 2 times in Italy and France, but 6 times in Germany. It is because there are no big differences between the last ranks in term of market value \@ref(fig:Box-plot).
+
+
+```{r dominated, fig.cap="Graph showing leagues ultra dominated", fig.asp = 0.7, fig.width = 9, fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+
+Bayern = mw_table %>% filter(name == "Bayern Munich")
+Juventus = mw_table %>% filter(name == "Juventus")
+Paris = mw_table %>% filter(name == "Paris SG")
+Barcelona = mw_table %>% filter(name == "Barcelona")
+Real = mw_table %>% filter(name == "Real Madrid")
+
+namefamous = rbind(Bayern, Juventus, Paris, Barcelona, Real)
+namefamous = namefamous %>% filter(year == "2013")
+
+mw_table  %>% filter(league != "Premier League") %>%
+  ggplot(aes(
+    x = year ,
+    y = mw ,
+    col = factor(ranking)
+  )) +
+  geom_line() + facet_wrap( ~ league) +
+  scale_x_continuous(breaks = c(2011, 2013, 2015, 2017, 2019)) +
+  labs(
+    title = "Ultra dominated championships"  ,
+    subtitle = "From 2010 to 2019",
+    x = "Years",
+    y = "Mean market value per players (in millions)",
+    col = "Ranking"
+  ) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 18, face = "bold.italic"),
+    plot.subtitle = element_text(size = 14, face = "italic"),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    legend.key.width = unit(0.2, "cm"),
+    legend.text = element_text(size = 12)
+  ) + guides(col = guide_legend(ncol = 2)) +
+  geom_point(data = Bayern, col = "red") +
+  geom_point(data = Juventus, col = "red") +
+  geom_point(data = Paris, col = "red") +
+  geom_point(data = Real, col = "orange") +
+  geom_point(data = Barcelona, col = "red") +
+  ggrepel::geom_label_repel(aes(label = name), data = namefamous)
+
+
+
+
+```
+As seen before \@ref(fig:50) , the champions are often the teams with the highest mean market value per player.  
+
+As shown in \@ref(fig:Leagues-evolution), in the majority of the leagues, one or two teams dominate the others in terms of market value. This differentiation is visible in term of ranking \@ref(fig:dominated). 
+
+Indeed FC Bayern Munich , Paris SG and Juventus which clearly dominated their leagues in terms of market value, were champions respectively 8 times, 6 times and 8 times out of 10.
+Concerning La Liga, Real Madrid FC and FC Barcelona shared the first place for 9 years with 3 titles for Real Madrid and 6 for FC Barcelona.
+There is not a lot of suspense regarding these leagues \@ref(fig:dominated).
+
+The Premier League is the only league where there is not a clear domination.
+
+```{r England, fig.cap="Graph showing a tight championship", fig.asp = 0.7, fig.width = 7, fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+
+
+Leicester = mw_table %>% filter(name == "Leicester" & year == "2016")
+
+mw_table  %>% filter(league == "Premier League") %>%
+  ggplot(aes(
+    x = year,
+    y = mw,
+    col = as.factor(ranking),
+    group = ranking
+  )) +
+  geom_line() +
+  labs(
+    title = "A limited impact of money",
+    subtitle = "The case of the Premier League",
+    x = "Years",
+    y = "Mean market value per player (in millions)",
+    col = "Ranking"
+  ) +
+  scale_x_continuous(breaks = c(2010:2019)) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 18, face = "bold.italic"),
+    plot.subtitle = element_text(size = 14, face = "italic"),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    legend.key.width = unit(0.2, "cm")
+  ) +
+  guides(col = guide_legend(ncol = 2)) +
+  ggrepel::geom_label_repel(aes(label = name), data = Leicester)
+
+
+```
+In England \@ref(fig:England) a lot of teams have high market value and contrary as other leagues it is not just one or two teams. It is a very competitive league where a lot of teams can win and not necessarily the richest one. The best example is Leicester which wins the league in 2016 with the 4th lowest market value per player.
+
+
+```{r leagues-rank-mv, fig.cap="A graph of the evolution of the market value per ranking in each league",fig.align = 'center', warning=FALSE, message=FALSE, echo = FALSE}
+
+mw_table  %>%
+  group_by(ranking, league) %>%
+  summarise(mv = mean(mw)) %>%
+  ggplot(aes(x = ranking, y = mv, col = league)) +
+  geom_line() +
+  labs(
+    title = "Football a predictable science",
+    subtitle = "England the exception that proves the rule",
+    x = "Ranking",
+    y = "Mean market value per player (in millions)",
+    col = "Leagues"
+  ) +
+  scale_x_continuous(breaks = c(1:20)) +
+  scale_y_continuous(breaks = c(5, 10, 15, 20, 25)) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10)
+  )
+```
+The graph \@ref(fig:leagues-rank-mv) justify what we have seen above  \@ref(fig:dominated). 
+Indeed, the difference in term of market value between the first teams and the others is less important in England than in other countries.  Moreover, the Premier League is the only league where the firsts 6 teams have a so small difference in term of market value, approximately 4 million. In contrary to other leagues, there is a smaller disparity and more surprise can appear as shown in \@ref(fig:England). That is why it is the most attractive league.
+
+## Disparities in Football
+
+```{r Disparity,fig.asp=0.7, fig.width=7 , fig.align = 'center', fig.cap="Graphs showing various growing disparities about rankings", warning=FALSE, message=FALSE, echo = FALSE}
+
+
+Disparitypoints = mw_table %>% group_by(year, ranking) %>% summarise(pts = mean(points)) %>%
+  ggplot(aes(
+    x = year,
+    y = pts,
+    col = as.factor(ranking),
+    group = ranking
+  )) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2011, 2013, 2015, 2017, 2019)) +
+  labs(
+    title = "Disparities",
+    subtitle = "Regarding points",
+    x = "Years",
+    y = "Number of points",
+    col = "Ranking"
+  ) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 18, face = "bold.italic"),
+    plot.subtitle = element_text(size = 14, face = "italic"),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  ) +
+  theme(legend.position = "none")
+
+
+Disparityvalue = mw_table  %>% group_by(ranking, year) %>% summarise(mw = mean(mw)) %>%
+  ggplot(aes(
+    x = year,
+    y = mw,
+    col = as.factor(ranking),
+    group = ranking
+  )) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2011, 2013, 2015, 2017, 2019)) +
+  labs(
+    title = "",
+    subtitle = "Regarding player value",
+    x = "Years",
+    y = "Mean market value per player (in millions)",
+    col = "Ranking"
+  ) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 18, face = "bold.italic"),
+    plot.subtitle = element_text(size = 14, face = "italic"),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  ) +
+  theme(legend.key.width = unit(0.2, "cm")) +
+  guides(col = guide_legend(ncol = 2))
+
+
+(Disparitypoints + Disparityvalue) 
+```
+These graphs \@ref(fig:Disparity) show us the disparities which appears since 2010.
+
+First regarding the number of points, the difference between the first and the last rank had increase a lot.
+Then concerning the mean market value per player, the firsts places have a faster increase than the lasts ones in term of mean market value per players.
+
+The best teams (with more money) have more points and vise versa. 
+However, there is no much change in the number of points for teams in the middle of the ranking. This can be explained by the fact that now they are not able anymore to win against the richest teams but the poorest teams are not able to beat them. All results are more predictable and football become less interesting. 
+
+## The Champions League
+
+```{r Championsleague,fig.asp=0.7, fig.width=7 ,fig.align = 'center' , fig.cap="Graph representing the winners of the Champions league", warning=FALSE, message=FALSE, echo = FALSE}
+ChampionsLeague = mw_table %>%
+  filter((name == "Paris SG")  |
+           (name == "Bayern Munich") |
+           (name == "Dortmund") |
+           (name == "Inter") |
+           (name == "Juventus") |
+           (name == "Ath Madrid") |
+           (name == "Barcelona") |
+           (name == "Real Madrid") |
+           (name == "Chelsea") |
+           (name == "Arsenal") |
+           (name == "Man United") |
+           (name == "Man City") |
+           (name == "Liverpool") |
+           (name == "Tottenham")
+  )
+
+WinnerChampionsLeague = ChampionsLeague %>%
+  filter(
+    (name == "Inter" &
+       year == "2010") |
+      (name == "Barcelona" &
+         year == "2011") |
+      (name == "Chelsea" &
+         year == "2012") |
+      (name == "Bayern Munich" &
+         year == "2013") |
+      (name == "Real Madrid" &
+         year == "2014") |
+      (name == "Barcelona" &
+         year == "2015") |
+      (name == "Real Madrid" &
+         year == "2016") |
+      (name == "Real Madrid" &
+         year == "2017") |
+      (name == "Real Madrid" &
+         year == "2018") |
+      (name == "Liverpool" &
+         year == "2019")
+  )
+
+ChampionsLeague %>%
+  ggplot(aes(x = year, y = mw, col = name)) +
+  geom_line() +
+  geom_point(data = WinnerChampionsLeague, col = "black") +
+  ggrepel::geom_label_repel(aes(label = name), data = WinnerChampionsLeague) +
+  scale_x_continuous(breaks = c(2010:2019)) +
+  labs(
+    title = "The most prestigious competition: the Champiuons League"  ,
+    subtitle = "Data from 2010 to 2019",
+    x = "Years",
+    y = "Mean market value per player (in millions)",
+    col = "Teams"
+  ) +
+  theme(
+    plot.title = element_text(color = "darkred", size = 14, face = "bold.italic"),
+    plot.subtitle = element_text(size = 12, face = "italic"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    legend.key.width = unit(0.2, "cm")
+  ) + guides(col = guide_legend(ncol = 2))
+
+```
+
+The champions league is a competition regrouping the best teams of each league in Europe. Which means the richest teams with the highest market value of Europe. It is a competition comparable to the Premier League (\@ref(fig:England)), where there are a lot of teams with high market value. Money have less impact because you play against teams which had approximately the same market value. That creates a more competitive competition, very difficult to win. Indeed, during 10 years, teams with the highest market value won only 4 times (\@ref(fig:Championsleague)).
+
+
